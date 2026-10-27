@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nivesh – Investment Register</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#eef2f1;--sf:#fff;--ink:#12302b;--mut:#5d7570;--ln:#d5dfdc;--ac:#0f766e;--eq:#0f766e;--db:#3b5bdb;--wn:#c98a00;--wnb:#fff4d6;--bad:#c2410c;--good:#15803d}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1917;--sf:#16251f;--ink:#e4efec;--mut:#8fa9a3;--ln:#27403a;--ac:#2dd4bf;--eq:#2dd4bf;--db:#8da2fb;--wn:#f5b942;--wnb:#3a2f10;--bad:#fb923c;--good:#4ade80}}
+:root[data-theme="dark"]{--bg:#0e1917;--sf:#16251f;--ink:#e4efec;--mut:#8fa9a3;--ln:#27403a;--ac:#2dd4bf;--eq:#2dd4bf;--db:#8da2fb;--wn:#f5b942;--wnb:#3a2f10;--bad:#fb923c;--good:#4ade80}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Manrope,system-ui,sans-serif}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--ln);background:var(--sf)}
+h1{font-size:22px;margin:0;font-weight:800;letter-spacing:-.02em}h2{font-size:16px;margin:0 0 10px;font-weight:800}
+main{max-width:1100px;margin:0 auto;padding:18px 16px 60px}
+nav{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:16px}
+nav button{border:0;background:none;color:var(--mut);font:inherit;font-weight:600;padding:8px 14px;border-radius:8px;cursor:pointer}
+nav button.on{background:var(--ink);color:var(--bg)}
+button,select,input{font:inherit;color:inherit}
+.btn{background:var(--ac);color:#fff;border:0;border-radius:8px;padding:8px 14px;font-weight:600;cursor:pointer}
+:root[data-theme="dark"] .btn{color:#06201b}
+.ghost{background:none;border:1px solid var(--ln);color:var(--ink)}
+:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.card{background:var(--sf);border:1px solid var(--ln);border-radius:12px;padding:16px}
+.grid{display:grid;gap:14px}.k4{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}.g2{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.big{font-size:26px;font-weight:800;letter-spacing:-.02em}.mut{color:var(--mut);font-size:13px}
+.up{color:var(--good)}.dn{color:var(--bad)}
+.alert{background:var(--wnb);border:1px solid var(--wn);border-radius:12px;padding:12px 16px;margin-bottom:14px}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--ln);white-space:nowrap}
+th{color:var(--mut);font-weight:600;cursor:pointer}.wrap{overflow-x:auto}
+.tag{display:inline-block;padding:1px 9px;border-radius:99px;font-size:12px;font-weight:600;border:1px solid currentColor}
+.tag.Equity{color:var(--eq)}.tag.Debt{color:var(--db)}.tag.soon{color:var(--wn)}
+.bar{height:10px;border-radius:5px;background:var(--ln);overflow:hidden}.bar i{display:block;height:100%}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+input,select{background:var(--bg);border:1px solid var(--ln);border-radius:8px;padding:7px 10px}
+dialog{border:1px solid var(--ln);border-radius:14px;background:var(--sf);color:var(--ink);width:min(520px,94vw);padding:20px}
+dialog::backdrop{background:#0008}
+.f{display:grid;grid-template-columns:1fr 1fr;gap:10px}.f label{display:grid;gap:3px;font-size:13px;color:var(--mut)}.f .w{grid-column:1/-1}
+.seg{cursor:pointer}.seg:hover{opacity:.8}
+a.x{color:var(--bad);cursor:pointer;margin-left:8px}a.e{color:var(--ac);cursor:pointer}
+.menu{position:absolute;right:20px;top:60px;z-index:20;background:var(--sf);border:1px solid var(--ln);border-radius:12px;padding:8px;min-width:260px;box-shadow:0 8px 24px #0003}.menu h3{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);margin:8px 8px 4px}.menu a{display:block;padding:7px 10px;border-radius:8px;cursor:pointer}.menu a:hover{background:var(--bg)}
+.crumbs{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:12px;font-size:13px;color:var(--mut)}.crumbs a{color:var(--ac);cursor:pointer;font-weight:600}.segc{display:inline-flex;border:1px solid var(--ln);border-radius:10px;overflow:hidden}.segc button{border:0;background:none;padding:7px 14px;cursor:pointer;color:var(--mut);font-weight:600}.segc button.on{background:var(--ink);color:var(--bg)}header{position:relative}tr[data-open]:hover{background:var(--bg)}svg text{pointer-events:none}
+</style></head><body>
+<header><div><h1>Nivesh</h1><div class="mut">Investment register for Indian investors · secure shared cloud</div></div>
+<div class="row" style="margin:0"><span id="role" class="tag soon" hidden></span><label class="mut">Investor <select id="who"></select></label>
+<button class="btn ghost" id="theme" hidden>Theme</button><button class="btn ghost" id="toolbtn" aria-haspopup="true">Tools ▾</button></div><div class="menu" id="tm" hidden></div></header>
+<main><nav id="nav"></nav><div id="view"></div></main>
+<dialog id="dlg"><form method="dialog" id="frm" class="f"></form></dialog>
+<script>
+const TYPES={ "Equity shares":"Equity","Equity mutual fund":"Equity","ETF":"Equity","NPS (equity)":"Equity","ULIP":"Equity",
+"Fixed deposit":"Debt","Recurring deposit":"Debt","PPF":"Debt","EPF":"Debt","NSC":"Debt","Sukanya Samriddhi":"Debt","Debt mutual fund":"Debt","Bonds / NCD":"Debt","Sovereign Gold Bond":"Debt","Post Office scheme":"Debt","Senior Citizens Savings":"Debt"};
+const DAY=864e5,$=s=>document.querySelector(s);
+let S={profiles:[],cur:null,inv:{},inc:{},win:15,tab:"Dashboard",eall:false,esort:["pl",-1],fy:null,imode:"all",det:null,f:{q:"",cls:"",type:""},sort:["maturity",1]};
+let RW=false;const save=()=>{window.onSave&&onSave()};
+const uid=()=>Math.random().toString(36).slice(2,9);
+const d0=()=>{const d=new Date();d.setHours(0,0,0,0);return d};
+const iso=d=>new Date(d.getTime()-d.getTimezoneOffset()*6e4).toISOString().slice(0,10);
+const addD=n=>iso(new Date(d0().getTime()+n*DAY));
+const inr=n=>new Intl.NumberFormat("en-IN",{style:"currency",currency:"INR",maximumFractionDigits:0}).format(n||0);
+const short=n=>{const a=Math.abs(n);return (n<0?"-":"")+"₹"+(a>=1e7?(a/1e7).toFixed(2)+" Cr":a>=1e5?(a/1e5).toFixed(2)+" L":a>=1e3?(a/1e3).toFixed(1)+" K":a.toFixed(0))};
+const fd=s=>s?new Date(s+"T00:00").toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"}):"–";
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const list=()=>S.inv[S.cur]||(S.inv[S.cur]=[]);
+function valAt(i,T){const st=Date.parse(i.start+"T00:00");if(!i.rate)return +i.amount;const end=i.maturity?Math.min(T,Date.parse(i.maturity+"T00:00")):T,y=Math.max(0,(end-st)/DAY/365),r=i.rate/100,n={M:12,Q:4,H:2,Y:1}[i.comp||"Y"];
+ if(i.type=="Recurring deposit"&&+i.inst>0){const sd=new Date(st);let t=0;for(let k=0;k<600;k++){const dd=new Date(sd.getFullYear(),sd.getMonth()+k,sd.getDate()).getTime();if(dd>end)break;t+=i.inst*Math.pow(1+r/4,4*(end-dd)/DAY/365)}return t}
+ return i.comp=="S"?i.amount*(1+r*y):i.amount*Math.pow(1+r/n,n*y)}
+function curVal(i){if(i.value!==""&&i.value!=null&&!isNaN(i.value))return +i.value;return i.rate&&i.start?valAt(i,d0().getTime()):+i.amount}
+const daysLeft=i=>i.maturity?Math.round((new Date(i.maturity+"T00:00")-d0())/DAY):null;
+function xirr(f){if(f.length<2||!f.some(x=>x.a<0)||!f.some(x=>x.a>0))return null;const t0=Math.min(...f.map(x=>x.t));
+ const v=r=>f.reduce((q,x)=>q+x.a/Math.pow(1+r,(x.t-t0)/(365*DAY)),0);let lo=-.99,hi=10;if(v(lo)*v(hi)>0)return null;
+ for(let n=0;n<100;n++){const m=(lo+hi)/2;v(lo)*v(m)<=0?hi=m:lo=m}return (lo+hi)/2*100}
+function flows(i){const T=d0().getTime(),tx=(i.tx||[]).filter(x=>Date.parse(x.date+"T00:00")<=T);
+ const f=tx.length?tx.map(x=>({t:Date.parse(x.date+"T00:00"),a:x.type=="sell"?+x.amount:-x.amount})):[{t:Date.parse(i.start+"T00:00"),a:-i.amount}];
+ f.push({t:T,a:curVal(i)});return f}
+function cagr(i){const f=flows(i);return (d0().getTime()-Math.min(...f.map(x=>x.t)))/DAY>30?xirr(f):null}
+function txForm(i){i.tx=i.tx||[];const dlg=$("#dlg"),F=$("#frm");F.onsubmit=null;
+ const sync=()=>{if(i.tx.length){const b=i.tx.filter(x=>x.type!="sell").reduce((q,x)=>q+ +x.amount,0),c=i.tx.filter(x=>x.type=="sell").reduce((q,x)=>q+ +x.amount,0);i.amount=Math.max(0,b-c);i.start=i.tx.map(x=>x.date).sort()[0]}render()};
+ const draw=()=>{F.innerHTML=`<h2 class="w">Transactions: ${esc(i.name)}</h2><div class="w wrap" style="max-height:190px;overflow:auto"><table>${i.tx.slice().sort((a,b)=>a.date<b.date?-1:1).map(x=>`<tr><td>${fd(x.date)}</td><td>${x.type=="sell"?"Redeem":"Invest"}</td><td>${inr(x.amount)}</td><td><a class="x" data-rm="${x.id}">Remove</a></td></tr>`).join("")||`<tr><td class="mut">No transactions yet. Without them, XIRR assumes one lump sum on the start date.</td></tr>`}</table></div>
+ <label>Type<select id="t_ty"><option value="buy">Invest</option><option value="sell">Redeem</option></select></label><label>Date<input id="t_d" type="date" value="${iso(d0())}"></label>
+ <label>Amount (₹)<input id="t_a" type="number" min="0" step="any"></label><div class="row" style="align-items:end"><button type="button" class="btn" id="t_add">Add transaction</button></div>
+ <h2 class="w">Monthly SIP</h2><label>Amount per month (₹)<input id="s_a" type="number" min="0" step="any"></label><label>First instalment<input id="s_d" type="date" value="${iso(d0())}"></label>
+ <label>Months<input id="s_n" type="number" min="1" max="360" value="12"></label><div class="row" style="align-items:end"><button type="button" class="btn ghost" id="s_add">Generate SIP</button></div>
+ <p class="w mut">Future instalments are ignored in XIRR until their date arrives.</p><div class="w row" style="justify-content:flex-end"><button class="btn" value="x">Done</button></div>`;
+ F.querySelectorAll("[data-rm]").forEach(a=>a.onclick=()=>{i.tx=i.tx.filter(x=>x.id!=a.dataset.rm);sync();draw()});
+ $("#t_add").onclick=()=>{const a=+$("#t_a").value,d=$("#t_d").value;if(!(a>0)||!d)return;i.tx.push({id:uid(),type:$("#t_ty").value,date:d,amount:a});sync();draw()};
+ $("#s_add").onclick=()=>{const a=+$("#s_a").value,d=$("#s_d").value,n=Math.min(360,+$("#s_n").value||0);if(!(a>0)||!d||!n)return;const[y,m,dd]=d.split("-").map(Number);
+  for(let k=0;k<n;k++){const dt=new Date(y,m-1+k,1);dt.setDate(Math.min(dd,new Date(y,m+k,0).getDate()));i.tx.push({id:uid(),type:"buy",date:iso(dt),amount:a})}sync();draw()}};
+ draw();dlg.showModal()}
+function casPick(){const f=document.createElement("input");f.type="file";f.accept=".json,application/json";
+ f.onchange=async()=>{try{const n=importCas(JSON.parse(await f.files[0].text()));render();alert(n?n+" holdings imported or updated.":"No holdings found in this file.")}catch(e){alert("This file couldn’t be read as a CAS JSON export: "+e.message)}};f.click()}
+function importCas(d){const a=list();let n=0;const up=o=>{const k=a.findIndex(x=>x.id==o.id);if(k>=0){if(!o.tx||!o.tx.length){delete o.amount;delete o.start}Object.assign(a[k],o)}else a.push(o);n++};
+ for(const fo of d.folios||[])for(const sc of fo.schemes||[]){
+  const tx=(sc.transactions||[]).filter(t=>t.amount!=null&&t.date).map(t=>({id:uid(),type:/^(REDEMPTION|SWITCH_OUT)/.test(t.type)?"sell":/^(PURCHASE|SWITCH_IN)/.test(t.type)?"buy":null,date:String(t.date).slice(0,10),amount:Math.abs(+t.amount)})).filter(t=>t.type&&t.amount>0);
+  const val=+(sc.valuation&&sc.valuation.value)||0,units=+sc.close||+sc.close_calculated||0;if(!val&&!units)continue;
+  const net=tx.reduce((q,t)=>q+(t.type=="sell"?-t.amount:t.amount),0);
+  up({id:"cas-"+(sc.isin||sc.rta_code||sc.scheme)+"-"+fo.folio,name:sc.scheme,type:/DEBT|LIQUID|GILT/i.test(sc.type||"")?"Debt mutual fund":"Equity mutual fund",tx,amount:tx.length?Math.max(0,net):(+(sc.valuation&&sc.valuation.cost)||val),
+   start:tx.length?tx.map(t=>t.date).sort()[0]:iso(d0()),value:val,qty:units,isin:sc.isin||"",amfi:sc.amfi?String(sc.amfi):"",note:"Folio "+fo.folio+" · "+(fo.amc||""),rate:0,maturity:""})}
+ for(const ac of d.accounts||[]){for(const e of ac.equities||[])up({id:"cas-"+e.isin,name:e.name,type:"Equity shares",isin:e.isin,qty:+e.num_shares||0,value:+e.value||0,amount:+e.value||0,start:iso(d0()),rate:0,maturity:"",note:"Demat "+(ac.type||"")});
+  for(const e of ac.mutual_funds||[])up({id:"cas-"+e.isin,name:e.name,type:"Equity mutual fund",isin:e.isin,qty:+(e.balance||e.units)||0,value:+e.value||0,amount:+e.value||0,start:iso(d0()),rate:0,maturity:"",note:"Demat "+(ac.type||"")})}
+ return n}
+const cp=()=>S.profiles.find(p=>p.id==S.cur)||{},incList=()=>S.cur?(S.inc[S.cur]||(S.inc[S.cur]=[])):[];
+const fyNow=()=>{const d=new Date();return d.getMonth()>=3?d.getFullYear():d.getFullYear()-1},fyOf=x=>{const d=new Date(x+"T00:00");return d.getMonth()>=3?d.getFullYear():d.getFullYear()-1},fyL=y=>y+"-"+String(y+1).slice(2);
+const dl=(n,t)=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([t],{type:"text/csv"}));a.download=n;a.click()};
+const BANKS={HDFC:"HDFC Bank",SBIN:"State Bank of India",ICIC:"ICICI Bank",UTIB:"Axis Bank",KKBK:"Kotak Mahindra Bank",PUNB:"Punjab National Bank",BARB:"Bank of Baroda",CNRB:"Canara Bank",UBIN:"Union Bank of India",IDIB:"Indian Bank",INDB:"IndusInd Bank",YESB:"Yes Bank",IBKL:"IDBI Bank",FDRL:"Federal Bank",IOBA:"Indian Overseas Bank",BKID:"Bank of India",CBIN:"Central Bank of India",MAHB:"Bank of Maharashtra",UCBA:"UCO Bank",SIBL:"South Indian Bank",KVBL:"Karur Vysya Bank",RATN:"RBL Bank",IDFB:"IDFC First Bank",AUBL:"AU Small Finance Bank",POST:"India Post Payments Bank"};
+function profForm(p){const F=$("#frm");p.banks=p.banks||[];p.demats=p.demats||[];const keep=()=>{const n=$("#p_n").value.trim();if(n)p.name=n;p.pan=$("#p_p").value.trim().toUpperCase()};
+ F.onsubmit=e=>{if(e.submitter.value=="ok"){keep();render()}};
+ const draw=()=>{F.innerHTML=`<h2 class="w">Investor details</h2><label>Name<input id="p_n" value="${esc(p.name)}"></label><label>PAN<input id="p_p" maxlength="10" value="${esc(p.pan)}"></label>
+ <h2 class="w">Bank accounts</h2>${p.banks.map(b=>`<div class="w mut">${esc(b.bank)}${b.branch?", "+esc(b.branch):""} · ${esc(b.type)} · ••••${esc(b.acc)} · ${esc(b.ifsc)}${b.addr?"<br>"+esc(b.addr):""} <a class="x" data-rb="${b.id}">Remove</a></div>`).join("")||'<div class="w mut">None added yet.</div>'}
+ <label>IFSC (bank and address fill in)<input id="b_i" maxlength="11" autocomplete="off"></label><label>Account number (last 4 digits)<input id="b_a" maxlength="4" inputmode="numeric"></label>
+ <label>Bank<input id="b_b"></label><label>Branch<input id="b_r"></label><label class="w">Branch address<input id="b_ad"></label><label>Account type<select id="b_t"><option>Savings</option><option>Current</option><option>NRE</option><option>NRO</option></select></label><div class="mut" id="b_s" style="align-self:end"></div>
+ <div class="w row"><button type="button" class="btn ghost" id="b_add">Add bank account</button></div>
+ <h2 class="w">Trading and demat accounts</h2>${p.demats.map(d=>`<div class="w mut">${esc(d.broker)} · client ${esc(d.client)} · demat ${esc(d.demat)} <a class="x" data-rd="${d.id}">Remove</a></div>`).join("")||'<div class="w mut">None added yet.</div>'}
+ <label>Broker<input id="d_b" list="brk"></label><datalist id="brk">${["Zerodha","Groww","Upstox","ICICI Direct","HDFC Securities","Kotak Securities","Angel One","Axis Direct","Sharekhan","Motilal Oswal","5paisa","Paytm Money"].map(x=>`<option>${x}</option>`).join("")}</datalist><label>Trading client ID<input id="d_c"></label><label class="w">Demat (DP ID and client ID)<input id="d_d" placeholder="IN301234 12345678"></label>
+ <div class="w row"><button type="button" class="btn ghost" id="d_add">Add trading account</button></div><div class="w row" style="justify-content:flex-end"><button class="btn ghost" value="x" formnovalidate>Cancel</button><button class="btn" value="ok">Save details</button></div>`;
+ F.querySelectorAll("[data-rb]").forEach(a=>a.onclick=()=>{keep();p.banks=p.banks.filter(x=>x.id!=a.dataset.rb);draw()});F.querySelectorAll("[data-rd]").forEach(a=>a.onclick=()=>{keep();p.demats=p.demats.filter(x=>x.id!=a.dataset.rd);draw()});
+ $("#b_i").oninput=async e=>{const c=e.target.value.toUpperCase().replace(/[^A-Z0-9]/g,"");e.target.value=c;const S2=$("#b_s");if(c.length>=4&&BANKS[c.slice(0,4)]&&!$("#b_b").value)$("#b_b").value=BANKS[c.slice(0,4)];if(c.length!=11)return;S2.textContent="Looking up…";
+  try{const r=await fetch("https://ifsc.razorpay.com/"+c);if(!r.ok)throw 0;const j=await r.json();$("#b_b").value=j.BANK||"";$("#b_r").value=j.BRANCH||"";$("#b_ad").value=j.ADDRESS||"";S2.textContent="Filled from IFSC"}catch(x){S2.textContent="Couldn’t look this up. Check the IFSC or enter the details by hand."}};
+ $("#b_add").onclick=()=>{keep();const b=$("#b_b").value.trim();if(!b)return;p.banks.push({id:uid(),bank:b,branch:$("#b_r").value.trim(),addr:$("#b_ad").value.trim(),type:$("#b_t").value,acc:$("#b_a").value.replace(/\D/g,"").slice(-4),ifsc:$("#b_i").value.trim().toUpperCase()});draw()};
+ $("#d_add").onclick=()=>{keep();const b=$("#d_b").value.trim();if(!b)return;p.demats.push({id:uid(),broker:b,client:$("#d_c").value.trim(),demat:$("#d_d").value.trim()});draw()}};
+ draw();$("#dlg").showModal()}
+function eqv(){const ps=S.eall?S.profiles:S.profiles.filter(p=>p.id==S.cur);
+ const rows=ps.flatMap(p=>(S.inv[p.id]||[]).filter(i=>TYPES[i.type]=="Equity").map(i=>{const v=curVal(i),q=+i.qty||0,d=Math.round((d0()-new Date(i.start+"T00:00"))/DAY),inv=+i.amount;return{i,p,v,q,inv,pl:v-inv,pc:inv?(v-inv)/inv*100:0,avg:q?inv/q:null,ltp:q?v/q:null,d,lt:d>=365}}));
+ const k=S.esort[0],dir=S.esort[1];rows.sort((a,b)=>{const g=r=>k=="name"?r.i.name.toLowerCase():k=="d"?r.d:r[k];return(g(a)>g(b)?1:-1)*dir});
+ const T=rows.reduce((t,r)=>{t.inv+=r.inv;t.v+=r.v;r.lt?t.lt+=r.pl:t.st+=r.pl;r.pl>=0?(t.g+=r.pl,t.n++):(t.l+=r.pl,t.m++);return t},{inv:0,v:0,lt:0,st:0,g:0,l:0,n:0,m:0});
+ const pl=T.v-T.inv,mx=Math.max(1,...rows.map(r=>Math.abs(r.pl))),c=n=>n>=0?"up":"dn",h=(x,l)=>`<th data-es="${x}">${l}${k==x?(dir>0?" ▲":" ▼"):""}</th>`,f2=n=>n==null?"–":n.toLocaleString("en-IN",{maximumFractionDigits:2});
+ const kp=(l,v,cl,sub)=>`<div class="card"><div class="mut">${l}</div><div class="big ${cl||""}">${v}</div>${sub?`<div class="mut">${sub}</div>`:""}</div>`;
+ const pd=rows.map(r=>r.i.pxDate).filter(Boolean).sort().pop();
+ return `<div class="row"><span class="mut">${pd?"Prices as of previous close, "+fd(pd):"Prices are entered by hand"}. Update them from Tools › Prices.</span><button class="btn ghost" id="eall">${S.eall?"Showing all investors. Show current only":"Showing "+esc(cp().name||"")+". Show all investors"}</button></div>
+ <div class="grid k4">${kp("Invested",short(T.inv))}${kp("Market value",short(T.v))}${kp("Unrealised profit or loss",short(pl),c(pl),(T.inv?pl/T.inv*100:0).toFixed(1)+"% on cost")}${kp("Holdings",rows.length,"",T.n+" in profit, "+T.m+" in loss")}</div><br>
+ <div class="grid k4">${kp("Long-term (held 12 months or more)",short(T.lt),c(T.lt))}${kp("Short-term (under 12 months)",short(T.st),c(T.st))}${kp("Total gains",short(T.g),"up")}${kp("Total losses",short(T.l),"dn")}</div><br>
+ <div class="card"><h2>Profit or loss by holding</h2>${rows.map(r=>`<div class="row" style="flex-wrap:nowrap;margin:0 0 6px" title="${esc(r.i.name)}: ${inr(r.pl)} (${r.pc.toFixed(1)}%)"><span style="width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(r.i.name)}</span><div style="flex:1;display:flex"><div style="flex:1;display:flex;justify-content:flex-end"><i style="display:block;height:10px;width:${r.pl<0?Math.abs(r.pl)/mx*100:0}%;background:var(--bad)"></i></div><div style="flex:1"><i style="display:block;height:10px;width:${r.pl>0?r.pl/mx*100:0}%;background:var(--good)"></i></div></div><span class="${c(r.pl)}" style="width:80px;text-align:right">${short(r.pl)}</span></div>`).join("")||'<p class="mut">No equity holdings yet. Add shares, ETFs or equity funds in the Register.</p>'}</div><br>
+ <div class="card wrap"><table><tr>${h("name","Holding")}${h("q","Qty")}<th>Avg cost</th><th>Price</th>${h("inv","Invested")}${h("v","Value")}${h("pl","P/L")}${h("pc","P/L %")}<th>Weight</th>${h("d","Held")}<th>Term</th></tr>
+ ${rows.map(r=>`<tr data-open="${r.p.id}:${r.i.id}" style="cursor:pointer"><td><b>${esc(r.i.name)}</b><div class="mut">${[r.i.symbol,r.i.isin,S.eall?r.p.name:""].filter(Boolean).map(esc).join(" · ")}</div></td><td>${f2(r.q||null)}</td><td>${f2(r.avg)}</td><td>${f2(r.ltp)}${r.i.pxDate?`<div class="mut">${r.i.pxDate}</div>`:""}</td><td>${inr(r.inv)}</td><td>${inr(r.v)}</td><td class="${c(r.pl)}">${inr(r.pl)}</td><td class="${c(r.pl)}">${r.pc.toFixed(1)}%</td><td>${T.v?(r.v/T.v*100).toFixed(1):0}%</td><td>${r.d>=365?(r.d/365).toFixed(1)+" y":r.d+" d"}</td><td><span class="tag ${r.lt?"Equity":"soon"}">${r.lt?"Long":"Short"}</span></td></tr>`).join("")}</table></div>
+ <p class="mut">Unrealised means not yet sold. Cost is the amount invested; price is value divided by quantity. Prices are the previous trading day’s close where fetched. Sold holdings aren’t counted here.</p>`}
+function incv(){const all=incList();if(S.fy==null)S.fy=fyNow();const fys=[...new Set([fyNow(),S.fy,...all.map(x=>fyOf(x.date))])].sort((a,b)=>b-a);
+ const rows=all.filter(x=>fyOf(x.date)==S.fy).sort((a,b)=>a.date<b.date?1:-1),sm=k=>rows.filter(x=>x.kind==k).reduce((t,x)=>({g:t.g+ +x.gross,t:t.t+ +x.tds}),{g:0,t:0}),dv=sm("Dividend"),it=sm("Interest"),G=dv.g+it.g,TD=dv.t+it.t;
+ const by={};rows.forEach(x=>{const b=by[x.source]||(by[x.source]={k:x.kind,g:0,t:0});b.g+=+x.gross;b.t+=+x.tds});
+ const kp=(l,v,sub)=>`<div class="card"><div class="mut">${l}</div><div class="big">${v}</div>${sub?`<div class="mut">${sub}</div>`:""}</div>`;
+ return `<div class="row"><label>Financial year <select id="fy">${fys.map(y=>`<option value="${y}" ${y==S.fy?"selected":""}>${fyL(y)}</option>`).join("")}</select></label>${RW?'<button class="btn" id="ia">Add dividend or interest</button>':""}<button class="btn ghost" id="iex">Export this year</button></div>
+ <div class="grid k4">${kp("Dividend (gross)",inr(dv.g),"TDS "+inr(dv.t))}${kp("Interest (gross)",inr(it.g),"TDS "+inr(it.t))}${kp("TDS deducted this year",inr(TD),(G?(TD/G*100).toFixed(1):0)+"% of gross income")}${kp("Net received",inr(G-TD),"Total gross "+inr(G))}</div><br>
+ <div class="grid g2"><div class="card wrap"><h2>By source</h2><table><tr><th>Source</th><th>Gross</th><th>TDS</th><th>Net</th></tr>${Object.entries(by).sort((a,b)=>b[1].g-a[1].g).map(([n,b])=>`<tr><td>${esc(n)}<div class="mut">${b.k}</div></td><td>${inr(b.g)}</td><td>${inr(b.t)}</td><td>${inr(b.g-b.t)}</td></tr>`).join("")||'<tr><td class="mut">Nothing recorded for this year.</td></tr>'}</table></div>
+ <div class="card wrap"><h2>Entries</h2><table><tr><th>Date</th><th>Type</th><th>Source</th><th>Gross</th><th>TDS</th><th></th></tr>${rows.map(x=>`<tr><td>${fd(x.date)}</td><td>${x.kind}</td><td>${esc(x.source)}${x.sec?`<div class="mut">Sec ${esc(x.sec)}</div>`:""}</td><td>${inr(x.gross)}</td><td>${inr(x.tds)}</td><td>${RW?`<a class="e" data-ie="${x.id}">Edit</a><a class="x" data-ix="${x.id}">Delete</a>`:""}</td></tr>`).join("")}</table></div></div>
+ <p class="mut">Financial year runs April to March. Compare the TDS total with Form 26AS or your AIS before filing.</p>`}
+function incForm(o,pre){const x=o||{kind:"Dividend",date:iso(d0()),gross:"",tds:0,...(pre||{})},F=$("#frm");
+ F.innerHTML=`<h2 class="w">${o?"Edit":"Add"} dividend or interest</h2><label>Type<select name="kind"><option ${x.kind=="Dividend"?"selected":""}>Dividend</option><option ${x.kind=="Interest"?"selected":""}>Interest</option></select></label><label>Date received<input name="date" type="date" required value="${x.date}"></label>
+ <label class="w">Source<input name="source" list="srcs" required placeholder="Company, FD or scheme" value="${esc(x.source)}"></label><datalist id="srcs">${list().map(i=>`<option value="${esc(i.name)}">`).join("")}</datalist>
+ <label>Gross amount (₹)<input name="gross" type="number" min="0" step="any" required value="${x.gross}"></label><label>TDS deducted (₹)<input name="tds" type="number" min="0" step="any" value="${x.tds||0}"></label>
+ <label>TDS section<input name="sec" placeholder="194, 194A, 193" value="${esc(x.sec)}"></label><label>Note<input name="note" value="${esc(x.note)}"></label>
+ <div class="w row" style="justify-content:flex-end"><button class="btn ghost" value="x" formnovalidate>Cancel</button><button class="btn" value="ok">Save</button></div>`;
+ F.onsubmit=e=>{if(e.submitter.value!="ok")return;const d=Object.fromEntries(new FormData(F));d.gross=+d.gross;d.tds=+d.tds||0;o?Object.assign(o,d):incList().push({id:uid(),...d});render()};$("#dlg").showModal()}
+function incCsv(){const q=v=>`"${String(v??"").replace(/"/g,'""')}"`;dl("income-FY"+fyL(S.fy)+".csv",["Date,Type,Source,Gross,TDS,Section,Note",...incList().filter(x=>fyOf(x.date)==S.fy).map(x=>[x.date,x.kind,x.source,x.gross,x.tds,x.sec,x.note].map(q).join(","))].join("\n"))}
+const norm=h=>String(h).toLowerCase().replace(/[^a-z0-9% ]/g," ").replace(/\s+/g," ").trim();
+const AL={name:["name","scheme","security","holding","investment"],type:["type","scheme type","category","instrument"],amount:["amount","invested","invested amount","cost","amount invested"],value:["value","current value","market value"],start:["start","start date","purchase date","date"],maturity:["maturity","maturity date"],rate:["rate","interest rate","interest rate %","rate %"],symbol:["symbol","scrip","ticker","nse symbol"],isin:["isin"],qty:["qty","quantity","units","shares"],amfi:["amfi","amfi code","scheme code"],note:["note","notes","folio","remarks"],avg:["buy price","avg buy price","average buy price"],unit:["tenor unit","unit"],tenor:["tenor","tenure"],comp:["interest type","compounding","comp"],who:["investor","owner","profile","holder"]};
+const AC={date:["date","date received","payment date"],kind:["type","kind","income type"],source:["source","company","scheme","name","security"],gross:["gross","gross amount","amount"],tds:["tds","tds deducted","tax deducted"],sec:["section","tds section"],note:["note","notes","remarks"]};
+const TPL_I="Investor,Type,Name,Amount invested,Start date,Tenor,Tenor unit,Interest rate %,Interest type,Quantity,Buy price,NSE symbol,ISIN,AMFI code,Current value,Note\nInvestor name,Equity shares,Example: TCS,,2024-04-01,,,,,10,3000,TCS,INE467B01029,,,Example row\nInvestor name,Fixed deposit,Example: SBI FD,100000,2025-01-10,2,Years,7,Quarterly,,,,,,,Example row\nInvestor name,PPF,Example: PPF Post Office,300000,2020-08-01,,,7.1,,,,,,,350000,Example row\n",TPL_C="Date,Type,Source,Gross,TDS,Section,Note\n2026-06-15,Dividend,HDFC Bank,2500,250,194,Final dividend\n2026-03-31,Interest,SBI FD,17750,1775,194A,\n";
+const pick=(r,al)=>{const k=Object.keys(r);for(const a of al){const h=k.find(x=>norm(x)==a);if(h!==undefined&&String(r[h]).trim()!=="")return r[h]}return ""};
+const parseNum=v=>{const n=parseFloat(String(v).replace(/[₹,\s]/g,""));return isNaN(n)?null:n};
+const parseDate=v=>{v=String(v).trim();let m=/^(\d{4})-(\d{1,2})-(\d{1,2})/.exec(v);if(m)return m[1]+"-"+m[2].padStart(2,"0")+"-"+m[3].padStart(2,"0");m=/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{4})/.exec(v);if(m)return m[3]+"-"+m[2].padStart(2,"0")+"-"+m[1].padStart(2,"0");m=/^(\d{1,2})[- ]([A-Za-z]{3})[a-z]*[- ,]*(\d{4})/.exec(v);return m&&MON[m[2].toUpperCase()]?m[3]+"-"+String(MON[m[2].toUpperCase()]).padStart(2,"0")+"-"+m[1].padStart(2,"0"):null};
+function chkInv(rows){const ok=[],bad=[],tk=Object.keys(TYPES);rows.forEach((r,n)=>{const g=a=>pick(r,AL[a]),w="Row "+(n+2)+": ",name=String(g("name")).trim();if(!name)return bad.push(w+"name is missing");
+ const ty=String(g("type")).trim().toLowerCase(),t=tk.find(x=>x.toLowerCase()==ty)||tk.find(x=>ty&&x.toLowerCase().startsWith(ty));if(!t)return bad.push(w+"unknown type “"+g("type")+"”");
+ const st=parseDate(g("start")),q=g("qty")===""?"":parseNum(g("qty")),bp=g("avg")===""?null:parseNum(g("avg"));let amt=g("amount")===""?null:parseNum(g("amount"));if(amt==null&&q>0&&bp>0)amt=Math.round(q*bp*100)/100;
+ if(amt==null||amt<0)return bad.push(w+"amount invested is missing (or quantity and buy price)");if(!st)return bad.push(w+"start date should look like 2024-04-01 or 01/04/2024");
+ let mt=g("maturity")===""?"":parseDate(g("maturity"));if(mt===null)return bad.push(w+"maturity date is not valid");
+ let tn=null;const tv=parseNum(g("tenor")),un=String(g("unit")).trim().toLowerCase();if(tv!=null)tn=[tv,un[0]=="m"?"Months":un[0]=="d"?"Days":"Years"];else{const tm=parseNum(pick(r,["tenor months","tenure months"]));if(tm!=null)tn=[tm,"Months"]}
+ if(!mt){if(tn&&tn[0]>0)mt=addT(st,tn[0],tn[1]);else if(t=="PPF"||t=="Sukanya Samriddhi")mt=autoMat(t,st);else if(["NSC","Senior Citizens Savings","Sovereign Gold Bond"].includes(t))mt=addT(st,DEFT[t][0],DEFT[t][1])}
+ const cps=String(g("comp")).trim().toLowerCase(),cc=cps?({m:"M",h:"H",y:"Y",a:"Y",s:"S"}[cps[0]]||"Q"):(DEFT[t]||[0,0,"Y"])[2],val=g("value")===""?"":parseNum(g("value"));
+ const it={id:uid(),name,type:t,amount:amt,value:val==null?"":val,start:st,maturity:mt,rate:parseNum(g("rate"))||0,comp:cc,symbol:String(g("symbol")).trim().toUpperCase(),isin:String(g("isin")).trim().toUpperCase(),qty:q==null?"":q,amfi:String(g("amfi")).trim(),note:String(g("note")).trim(),_who:String(g("who")).trim()};
+ if(tn&&tn[0]>0&&mt){it.tenor=tn[0];it.unit=tn[1]}ok.push(it)});return{ok,bad}}
+function chkInc(rows){const ok=[],bad=[];rows.forEach((r,n)=>{const g=a=>pick(r,AC[a]),w="Row "+(n+2)+": ",dt=parseDate(g("date")),gr=parseNum(g("gross")),src=String(g("source")).trim(),kd=String(g("kind")).trim().toLowerCase();
+ if(!dt)return bad.push(w+"date should look like 2026-03-31 or 31/03/2026");if(gr==null)return bad.push(w+"gross amount is missing");if(!src)return bad.push(w+"source is missing");if(!/^[di]/.test(kd))return bad.push(w+"type should be Dividend or Interest");
+ ok.push({id:uid(),kind:kd[0]=="d"?"Dividend":"Interest",date:dt,source:src,gross:gr,tds:parseNum(g("tds"))||0,sec:String(g("sec")).trim(),note:String(g("note")).trim()})});return{ok,bad}}
+function parseCsv(t){const R=[];let r=[],c="",q=false;for(let i=0;i<t.length;i++){const ch=t[i];if(q){if(ch=='"'){if(t[i+1]=='"'){c+='"';i++}else q=false}else c+=ch}else if(ch=='"')q=true;else if(ch==","){r.push(c);c=""}else if(ch=="\n"||ch=="\r"){if(ch=="\r"&&t[i+1]=="\n")i++;r.push(c);R.push(r);r=[];c=""}else c+=ch}if(c!==""||r.length){r.push(c);R.push(r)}return R}
+async function readRows(f){if(/\.(csv|txt)$/i.test(f.name)){const t=parseCsv((await f.text()).replace(/^\uFEFF/,"")),h=t.shift()||[];return t.filter(r=>r.some(c=>c.trim())).map(r=>Object.fromEntries(h.map((k,i)=>[k,r[i]??""])))}
+ if(!window.XLSX)await new Promise((ok,no)=>{const e=document.createElement("script");e.src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js";e.onload=ok;e.onerror=()=>no(new Error("The Excel reader couldn’t load. Save the sheet as CSV and try again."));document.head.append(e)});
+ const wb=XLSX.read(await f.arrayBuffer(),{type:"array",cellDates:true});return XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames.find(n=>/^investments?$/i.test(n))||wb.SheetNames[0]],{defval:"",raw:false,dateNF:"yyyy-mm-dd"})}
+let IMP=null;
+function impForm(){const F=$("#frm");F.onsubmit=null;IMP=null;
+ F.innerHTML=`<h2 class="w">Import from Excel or CSV</h2><label>What are you importing?<select id="i_k"><option value="inv">Investments</option><option value="inc">Dividend and interest</option></select></label><label>File (.xlsx, .xls or .csv)<input id="i_f" type="file" accept=".csv,.xlsx,.xls"></label>
+ <div class="w"><a class="e" id="i_t">Download a CSV template</a></div><div class="w mut" id="i_p">Rows are added to ${esc(cp().name||"the selected investor")}. Existing entries aren’t changed. If the file has an Investor column, rows go to that investor and new investors are created.</div>
+ <div class="w row" style="justify-content:flex-end"><button class="btn ghost" value="x" formnovalidate>Cancel</button><button type="button" class="btn" id="i_go" disabled>Import rows</button></div>`;
+ const run=async()=>{const f=$("#i_f").files[0];IMP=null;$("#i_go").disabled=true;if(!f)return;$("#i_p").textContent="Reading…";
+  try{const r=($("#i_k").value=="inv"?chkInv:chkInc)(await readRows(f));IMP=r;$("#i_p").innerHTML="<b>"+r.ok.length+" rows ready</b>"+(r.ok.some(x=>x._who)?" for "+Object.entries(r.ok.reduce((a,x)=>{const k=x._who||"the current investor";a[k]=(a[k]||0)+1;return a},{})).map(([k,v])=>esc(k)+" ("+v+")").join(", "):"")+(r.bad.length?", "+r.bad.length+" skipped:<br>"+r.bad.slice(0,6).map(esc).join("<br>")+(r.bad.length>6?"<br>…":""):"");$("#i_go").disabled=!r.ok.length}catch(e){$("#i_p").textContent="Couldn’t read this file: "+e.message}};
+ $("#i_f").onchange=run;$("#i_k").onchange=run;$("#i_t").onclick=()=>{const v=$("#i_k").value=="inv";dl(v?"investments-template.csv":"income-template.csv",v?TPL_I:TPL_C)};
+ $("#i_go").onclick=()=>{if(!IMP)return;if($("#i_k").value=="inv"){const by={};IMP.ok.forEach(x=>{const k=x._who||"";delete x._who;(by[k]=by[k]||[]).push(x)});for(const [k,items] of Object.entries(by)){let p=k?S.profiles.find(q=>q.name.trim().toLowerCase()==k.toLowerCase()):S.profiles.find(q=>q.id==S.cur);if(!p){p={id:uid(),name:k,pan:""};S.profiles.push(p)}(S.inv[p.id]||(S.inv[p.id]=[])).push(...items)}}else incList().push(...IMP.ok);$("#dlg").close();render();alert(IMP.ok.length+" rows imported.")};$("#dlg").showModal()}
+function seed(){S.profiles=[{id:"p1",name:"Asha Mehta",pan:"ABCPM1234D"},{id:"p2",name:"Rohan Iyer",pan:""}];S.cur="p1";
+const m=(t,n,a,v,st,mat,r,note)=>({id:uid(),type:t,name:n,amount:a,value:v,start:st,maturity:mat,rate:r,note});
+S.inv.p1=[m("Equity mutual fund","Parag Parikh Flexi Cap",300000,462000,addD(-900),"",0,"Folio 1234567"),
+m("Equity shares","HDFC Bank (50 sh)",78000,86500,addD(-500),"",0,""),
+m("ETF","Nifty 50 BeES",120000,151000,addD(-700),"",0,""),
+m("Fixed deposit","SBI FD 7.1%",500000,"",addD(-350),addD(9),7.1,"Auto-renew off"),
+m("PPF","PPF – Post Office",150000,"",addD(-1800),addD(1500),7.1,""),
+m("Sovereign Gold Bond","SGB 2018-19 Series",90000,168000,addD(-2000),addD(40),2.5,""),
+m("Debt mutual fund","HDFC Corporate Bond",200000,224000,addD(-600),"",0,""),
+m("Recurring deposit","ICICI RD",120000,"",addD(-200),addD(165),6.8,""),
+m("NSC","NSC VIII Issue",100000,"",addD(-1500),addD(14),7,"")];
+S.inv.p2=[m("Equity mutual fund","Mirae Asset Large Cap",100000,118000,addD(-400),"",0,""),m("Bonds / NCD","Muthoot NCD",100000,"",addD(-300),addD(300),9.1,"")];save()}
+function stats(a){const inv=a.reduce((s,i)=>s+ +i.amount,0),cur=a.reduce((s,i)=>s+curVal(i),0);return{inv,cur,g:cur-inv,p:inv?(cur-inv)/inv*100:0}}
+function filtered(){const f=S.f,k=S.sort[0],dir=S.sort[1];
+ return list().filter(i=>(!f.cls||TYPES[i.type]==f.cls)&&(!f.type||i.type==f.type)&&(!f.q||(i.name+i.type+i.note).toLowerCase().includes(f.q.toLowerCase())))
+ .sort((a,b)=>{const g=x=>k=="maturity"?(x.maturity||"9999"):k=="amount"?+x.amount:k=="value"?curVal(x):String(x[k]||"").toLowerCase();return(g(a)>g(b)?1:-1)*dir})}
+function donut(parts){const t=parts.reduce((s,p)=>s+p.v,0)||1;let off=0;const R=60,C=2*Math.PI*R;
+ return `<svg viewBox="0 0 160 160" width="170" role="img" aria-label="Allocation">${parts.map(p=>{const l=p.v/t*C,s=`<circle class="seg" data-cls="${p.k}" cx="80" cy="80" r="${R}" fill="none" stroke="${p.c}" stroke-width="26" stroke-dasharray="${l} ${C-l}" stroke-dashoffset="${-off}" transform="rotate(-90 80 80)"><title>${p.k}: ${inr(p.v)} (${(p.v/t*100).toFixed(1)}%)</title></circle>`;off+=l;return s}).join("")}
+ <text x="80" y="78" text-anchor="middle" fill="var(--mut)" font-size="10">Total</text><text x="80" y="96" text-anchor="middle" fill="var(--ink)" font-size="15" font-weight="800">${short(t)}</text></svg>`}
+function dash(){const a=list(),s=stats(a),px=xirr(a.flatMap(flows)),eq=a.filter(i=>TYPES[i.type]=="Equity"),db=a.filter(i=>TYPES[i.type]=="Debt");
+ const ev=eq.reduce((x,i)=>x+curVal(i),0),dv=db.reduce((x,i)=>x+curVal(i),0);
+ const due=a.filter(i=>{const d=daysLeft(i);return d!=null&&d>=0&&d<=S.win}).sort((x,y)=>daysLeft(x)-daysLeft(y));
+ const bt={};a.forEach(i=>{const b=bt[i.type]||(bt[i.type]={inv:0,cur:0});b.inv+=+i.amount;b.cur+=curVal(i)});
+ const mx=Math.max(1,...Object.values(bt).map(b=>Math.max(b.inv,b.cur)));
+ const mo=[];for(let n=0;n<12;n++){const d=new Date(d0().getFullYear(),d0().getMonth()+n,1);mo.push({l:d.toLocaleDateString("en-IN",{month:"short"}),y:d.getFullYear(),m:d.getMonth(),v:0})}
+ a.forEach(i=>{if(!i.maturity)return;const d=new Date(i.maturity+"T00:00");const b=mo.find(x=>x.m==d.getMonth()&&x.y==d.getFullYear());if(b)b.v+=curVal(i)});const mm=Math.max(1,...mo.map(x=>x.v));
+ return `${due.length?`<div class="alert"><b>${due.length} maturing in the next ${S.win} days</b><br>${due.map(i=>`<a class="e" data-open="${S.cur}:${i.id}">${esc(i.name)}</a> – ${inr(curVal(i))} on ${fd(i.maturity)} (${daysLeft(i)==0?"today":daysLeft(i)+" days"})`).join("<br>")}</div>`:""}
+ <div class="grid k4"><div class="card"><div class="mut">Invested</div><div class="big">${short(s.inv)}</div></div>
+ <div class="card"><div class="mut">Current value</div><div class="big">${short(s.cur)}</div></div>
+ <div class="card"><div class="mut">Gain</div><div class="big ${s.g>=0?"up":"dn"}">${short(s.g)}</div></div>
+ <div class="card"><div class="mut">Portfolio XIRR</div><div class="big ${s.g>=0?"up":"dn"}">${px==null?"–":px.toFixed(1)+"%"}</div><div class="mut">Absolute ${s.p.toFixed(1)}%</div></div></div><br>
+ <div class="grid g2"><div class="card"><h2>Equity vs debt</h2><div class="row">${donut([{k:"Equity",v:ev,c:"var(--eq)"},{k:"Debt",v:dv,c:"var(--db)"}])}
+ <div><div><span class="tag Equity">Equity</span> ${(ev/(ev+dv||1)*100).toFixed(1)}%</div><br><div><span class="tag Debt">Debt</span> ${(dv/(ev+dv||1)*100).toFixed(1)}%</div><p class="mut">Select a segment to drill into it.</p></div></div></div>
+ <div class="card"><h2>Maturities, next 12 months</h2><svg viewBox="0 0 360 140" width="100%">${mo.map((x,n)=>{const h=x.v/mm*100;return `<g><rect x="${n*30+4}" y="${110-h}" width="22" height="${h}" rx="3" fill="var(--wn)"><title>${x.l} ${x.y}: ${inr(x.v)}</title></rect><text x="${n*30+15}" y="128" text-anchor="middle" font-size="9" fill="var(--mut)">${x.l}</text></g>`}).join("")}</svg></div></div><br>
+ <div class="card wrap"><h2>Largest holdings</h2><table><tr><th>Name</th><th>Type</th><th>Value</th><th>Return</th></tr>${[...a].sort((x,y)=>curVal(y)-curVal(x)).slice(0,6).map(i=>{const v=curVal(i),g=v-i.amount;return `<tr data-open="${S.cur}:${i.id}" style="cursor:pointer"><td><b>${esc(i.name)}</b></td><td><span class="tag ${TYPES[i.type]}">${i.type}</span></td><td>${inr(v)}</td><td class="${g>=0?"up":"dn"}">${i.amount?(g/i.amount*100).toFixed(1):0}%</td></tr>`}).join("")||'<tr><td class="mut">No investments yet.</td></tr>'}</table></div><br>
+ <div class="card"><h2>By scheme type</h2>${Object.entries(bt).sort((x,y)=>y[1].cur-x[1].cur).map(([t,b])=>`<div class="seg" data-type="${esc(t)}" style="margin-bottom:10px"><div class="row" style="justify-content:space-between;margin:0"><span>${t} <span class="tag ${TYPES[t]}">${TYPES[t]}</span></span><span class="mut">${short(b.inv)} → ${short(b.cur)}</span></div><div class="bar"><i style="width:${b.cur/mx*100}%;background:var(--${TYPES[t]=="Equity"?"eq":"db"})"></i></div></div>`).join("")||"<p class='mut'>No investments yet. Add one in the Register tab.</p>"}</div>`}
+const TG={"Back up":"Backup and data","Restore":"Backup and data","History":"Backup and data","Data file":"Backup and data","Backup":"Backup and data","Alerts":"Settings","People and access":"Settings","Log out":"Account"};
+const TOOLS=[];function addTool(l,f){TOOLS.push({g:TG[l]||"More",l,f})}
+function toolItems(){const t=RW?[{g:"Import",l:"Excel or CSV…",f:impForm},{g:"Import",l:"CAS statement (JSON)…",f:casPick},{g:"Prices",l:"Update share prices",f:()=>updPx({})},{g:"Prices",l:"Load NSE price file…",f:pxPick}]:[];return [...t,...TOOLS,{g:"Settings",l:"Switch light or dark theme",f:()=>$("#theme").click()}]}
+function toolMenu(open){const m=$("#tm");if(!open){m.hidden=true;return}const it=toolItems();m._it=it;m.innerHTML=["Import","Prices","Backup and data","Settings","Account","More"].map(g=>{const x=it.filter(i=>i.g==g);return x.length?`<h3>${g}</h3>`+x.map(i=>`<a data-tool="${it.indexOf(i)}">${esc(i.l)}</a>`).join(""):""}).join("");m.hidden=false}
+document.addEventListener("click",e=>{if(!e.target.closest("#tm,#toolbtn"))toolMenu(false)});
+const invById=(pid,id)=>(S.inv[pid]||[]).find(i=>i.id==id);
+function txSync(i){if(i.tx&&i.tx.length){const b=i.tx.filter(x=>x.type!="sell").reduce((q,x)=>q+ +x.amount,0),c=i.tx.filter(x=>x.type=="sell").reduce((q,x)=>q+ +x.amount,0);i.amount=Math.max(0,b-c);i.start=i.tx.map(x=>x.date).sort()[0]}}
+function crumbs(){if(S.tab=="Dashboard")return "";const L=(t,c)=>c?`<a data-cr="${c}">${esc(t)}</a>`:`<b style="color:var(--ink)">${esc(t)}</b>`,P=[L("Overview","ov")];
+ if(S.tab!="Register"){P.push(L({Income:"Income",Reminders:"Reminders",Profiles:"Investors",Access:"People and access"}[S.tab]||S.tab,""));return `<div class="crumbs">${P.join(" › ")}</div>`}
+ const i=S.det&&invById(S.cur,S.det),cls=S.imode=="equity"?"Equity":S.imode=="debt"?"Debt":S.f.cls||(S.f.type?TYPES[S.f.type]:"");
+ P.push(L("Investments",(i||S.f.type||S.imode!="all"||S.f.cls)?"inv":""));if(cls)P.push(L(cls+(S.imode=="equity"?" analysis":""),(S.f.type||i)?"cls":""));if(S.f.type)P.push(L(S.f.type,i?"type":""));if(i)P.push(L(i.name,""));
+ return `<div class="crumbs">${P.join(" › ")}</div>`}
+function invw(){const i=S.det&&invById(S.cur,S.det);if(i)return crumbs()+detail(i);
+ return crumbs()+`<div class="row" style="justify-content:space-between"><div class="segc">${[["all","All holdings"],["equity","Equity analysis"],["debt","Debt and deposits"]].map(([k,l])=>`<button data-im="${k}" class="${S.imode==k?"on":""}">${l}</button>`).join("")}</div>${RW?'<button class="btn" id="add">Add investment</button>':""}</div>`+(S.imode=="equity"?eqv():reg())}
+function reg(){const a=filtered(),h=(k,l)=>`<th data-sort="${k}">${l}${S.sort[0]==k?(S.sort[1]>0?" ▲":" ▼"):""}</th>`,tv=a.reduce((t,i)=>t+curVal(i),0),ti=a.reduce((t,i)=>t+ +i.amount,0);
+ return `<div class="row"><input id="q" placeholder="Search name, symbol or note" value="${esc(S.f.q)}"><select id="ft"><option value="">All types</option>${Object.keys(TYPES).filter(t=>!S.f.cls||TYPES[t]==S.f.cls).map(t=>`<option ${S.f.type==t?"selected":""}>${t}</option>`).join("")}</select><button class="btn ghost" id="exp">Export CSV</button><span class="mut">${a.length} holdings · ${inr(ti)} invested · ${inr(tv)} now. Select a row to open it.</span></div>
+ <div class="card wrap"><table><tr>${h("name","Name")}${h("type","Type")}${h("amount","Invested")}${h("value","Current")}<th>Return</th>${h("maturity","Maturity")}</tr>
+ ${a.map(i=>{const v=curVal(i),g=v-i.amount,dl=daysLeft(i),c=cagr(i);return `<tr data-open="${S.cur}:${i.id}" style="cursor:pointer"><td><b>${esc(i.name)}</b><div class="mut">${[i.symbol,i.isin,i.note].filter(Boolean).map(esc).join(" · ")}</div></td><td><span class="tag ${TYPES[i.type]}">${i.type}</span></td><td>${inr(i.amount)}</td><td>${inr(v)}</td>
+ <td class="${g>=0?"up":"dn"}">${i.amount?(g/i.amount*100).toFixed(1):0}%${c!=null?`<div class="mut">${c.toFixed(1)}% XIRR</div>`:""}</td><td>${fd(i.maturity)}${dl!=null&&dl>=0&&dl<=S.win?` <span class="tag soon">${dl}d</span>`:dl!=null&&dl<0?` <span class="mut">matured</span>`:""}</td></tr>`}).join("")||`<tr><td colspan="6" class="mut">Nothing matches. Clear the filters or add an investment.</td></tr>`}</table></div>`}
+function detail(i){const p=cp(),v=curVal(i),g=v-i.amount,dl=daysLeft(i),c=cagr(i),q=+i.qty||0,inc=incList().filter(x=>(x.source||"").trim().toLowerCase()==i.name.trim().toLowerCase()).sort((a,b)=>a.date<b.date?1:-1),tx=(i.tx||[]).slice().sort((a,b)=>a.date<b.date?-1:1);
+ const ac=[...(p.banks||[]).map(b=>[b.id,"Bank: "+b.bank+" ••••"+b.acc]),...(p.demats||[]).map(d=>[d.id,"Trading: "+d.broker+" "+d.client])].find(x=>x[0]==i.acct),mv=i.maturity&&i.rate?valAt(i,Date.parse(i.maturity+"T00:00")):null;
+ const kv=(l,x)=>x===""||x==null?"":`<div><div class="mut">${l}</div><div>${x}</div></div>`,kp=(l,x,cl,sub)=>`<div class="card"><div class="mut">${l}</div><div class="big ${cl||""}">${x}</div>${sub?`<div class="mut">${sub}</div>`:""}</div>`;
+ return `<div class="row" style="justify-content:space-between"><div><h2 style="font-size:22px;margin:0">${esc(i.name)}</h2><span class="tag ${TYPES[i.type]}">${i.type}</span> <span class="mut">${esc(p.name||"")}</span></div>${RW?'<div class="row" style="margin:0"><button class="btn" id="dTx">Add transactions or SIP</button><button class="btn ghost" id="dEd">Edit</button><button class="btn ghost" id="dDel">Delete</button></div>':""}</div>
+ <div class="grid k4">${kp("Invested",inr(i.amount))}${kp("Current value",inr(v))}${kp("Gain or loss",inr(g),g>=0?"up":"dn",(i.amount?(g/i.amount*100).toFixed(1):0)+"%")}${kp("XIRR",c==null?"–":c.toFixed(1)+"%")}</div><br>
+ <div class="grid g2"><div class="card"><h2>Details</h2><div class="grid k4" style="gap:10px">${kv("Start date",fd(i.start))}${kv("Maturity",i.maturity?fd(i.maturity)+(dl>=0?" ("+dl+" days)":" (matured)"):"")}${kv("Interest rate",i.rate?i.rate+"% p.a.":"")}${kv("Interest type",i.rate&&KIND[i.type]!="listed"?({Q:"Compounded quarterly",M:"Compounded monthly",H:"Compounded half-yearly",Y:"Compounded yearly",S:"Simple interest"}[i.comp||"Y"]):"")}${kv("Maturity value",mv!=null?inr(mv):"")}${kv("Tenor",i.tenor?i.tenor+" "+(i.unit||""):"")}${kv("Quantity",q?q.toLocaleString("en-IN"):"")}${kv("Average cost",q?inr(i.amount/q):"")}${kv("Price",q&&i.value!==""&&i.value!=null?inr(v/q)+(i.pxDate?" on "+fd(i.pxDate):""):"")}${kv("NSE symbol",esc(i.symbol))}${kv("ISIN",esc(i.isin))}${kv("AMFI code",esc(i.amfi))}${kv("Held in",ac?esc(ac[1]):"")}${kv("Note",esc(i.note))}</div></div>
+ <div class="card wrap"><h2>Transactions</h2><table><tr><th>Date</th><th>Type</th><th>Amount</th><th></th></tr>${tx.map(x=>`<tr><td>${fd(x.date)}</td><td>${x.type=="sell"?"Redeem":"Invest"}</td><td>${inr(x.amount)}</td><td>${RW?`<a class="x" data-rmtx="${x.id}">Remove</a>`:""}</td></tr>`).join("")||`<tr><td>${fd(i.start)}</td><td>Invest (start date and amount)</td><td>${inr(i.amount)}</td><td></td></tr>`}</table>${tx.length?"":'<p class="mut">No separate transactions recorded, so XIRR treats the amount as one lump sum on the start date.</p>'}</div></div><br>
+ <div class="card wrap"><div class="row" style="justify-content:space-between;margin:0 0 8px"><h2 style="margin:0">Dividend and interest received</h2>${RW?'<button class="btn ghost" id="dInc">Add entry</button>':""}</div><table><tr><th>Date</th><th>Type</th><th>Gross</th><th>TDS</th><th>Net</th></tr>${inc.map(x=>`<tr><td>${fd(x.date)}</td><td>${x.kind}</td><td>${inr(x.gross)}</td><td>${inr(x.tds)}</td><td>${inr(x.gross-x.tds)}</td></tr>`).join("")||'<tr><td class="mut">None recorded. Entries are matched on the investment name.</td></tr>'}</table></div>`}
+function rem(){const a=list().filter(i=>i.maturity).sort((x,y)=>daysLeft(x)-daysLeft(y)).filter(i=>daysLeft(i)>=0);
+ const np=typeof Notification!="undefined"?Notification.permission:"unsupported";
+ return `<div class="row"><label>Remind me <input type="number" id="win" min="1" max="90" value="${S.win}" style="width:70px"> days before maturity</label>
+ <button class="btn ghost" id="notif">${np=="granted"?"Browser alerts on":"Enable browser alerts"}</button></div>
+ <p class="mut">Reminders show here and as a banner on the dashboard whenever you open the app. Browser alerts fire on open for anything inside your window.</p>
+ <div class="grid">${a.map(i=>{const d=daysLeft(i),u=d<=S.win;return `<div class="card" style="${u?"border-color:var(--wn)":""}"><div class="row" style="justify-content:space-between;margin:0"><b>${esc(i.name)}</b><span class="tag ${u?"soon":""}">${d==0?"Today":d+" days"}</span></div><div class="mut">${i.type} · matures ${fd(i.maturity)} · expected ${inr(curVal(i))}</div></div>`}).join("")||"<p class='mut'>No upcoming maturities for this investor.</p>"}</div>`}
+function prof(){return `${RW?'<div class="row"><button class="btn" id="np">Add investor profile</button></div>':""}<div class="grid k4">${S.profiles.map(p=>{const s=stats(S.inv[p.id]||[]);return `<div class="card"><b>${esc(p.name)}</b>${p.id==S.cur?" <span class='tag Equity'>Active</span>":""}<div class="mut">PAN ${esc(p.pan||"not added")}</div>${(p.banks||[]).map(b=>`<div class="mut">Bank: ${esc(b.bank)}${b.branch?", "+esc(b.branch):""} ••••${esc(b.acc)} · ${esc(b.ifsc)}${b.addr?"<br>"+esc(b.addr):""}</div>`).join("")}${(p.demats||[]).map(d=>`<div class="mut">Trading: ${esc(d.broker)} · ${esc(d.client)} · ${esc(d.demat)}</div>`).join("")}<div class="big">${short(s.cur)}</div><div class="mut">${(S.inv[p.id]||[]).length} investments</div><br>${RW?`<a class="e" data-pd="${p.id}">Details</a> `:""}<a class="e" data-use="${p.id}">Switch</a>${S.profiles.length>1&&RW?`<a class="x" data-dp="${p.id}">Remove</a>`:""}</div>`}).join("")}</div>`}
+function render(){$("#who").innerHTML=S.profiles.map(p=>`<option value="${p.id}" ${p.id==S.cur?"selected":""}>${esc(p.name)}</option>`).join("");
+ $("#nav").innerHTML=[["Dashboard","Overview"],["Register","Investments"],["Income","Income"],["Reminders","Reminders"],["Profiles","Investors"]].map(([t,l])=>`<button class="${S.tab==t||(S.tab=="Equity"&&t=="Register")?"on":""}" data-t="${t}">${l}</button>`).join("");
+ $("#view").innerHTML={Dashboard:dash,Register:invw,Equity:invw,Reminders:()=>crumbs()+rem(),Profiles:()=>crumbs()+prof(),Income:()=>crumbs()+incv(),Access:()=>crumbs()+'<div class="card" id="ac">Loading…</div>'}[S.tab]();if(S.tab=="Access")loadAcc();save()}
+const KIND={"Equity shares":"listed","ETF":"listed","Equity mutual fund":"mf","Debt mutual fund":"mf","NPS (equity)":"plain","ULIP":"policy","Fixed deposit":"fixed","Recurring deposit":"fixed","NSC":"fixed","Bonds / NCD":"fixed","Post Office scheme":"fixed","Senior Citizens Savings":"fixed","Sovereign Gold Bond":"sgb","PPF":"acct","Sukanya Samriddhi":"acct","EPF":"epf"};
+const SPEC={listed:["name","symbol","isin","qty","avg","start","price","acct","note"],mf:["name","amfi","isin","qty","amount","start","value","acct","note"],plain:["name","amount","start","value","acct","note"],policy:["name","amount","start","maturity","value","acct","note"],fixed:["name","inst","amount","start","tenor","maturity","rate","comp","value","acct","note"],sgb:["name","qty","avg","start","tenor","maturity","rate","price","acct","note"],acct:["name","amount","start","maturity","rate","value","acct","note"],epf:["name","amount","start","rate","value","acct","note"]};
+const DEFT={"Fixed deposit":[1,"Years","Q"],"Recurring deposit":[60,"Months","Q"],"NSC":[5,"Years","Y"],"Senior Citizens Savings":[5,"Years","Q"],"Post Office scheme":[5,"Years","Q"],"Bonds / NCD":[3,"Years","S"],"Sovereign Gold Bond":[8,"Years","S"],"Sukanya Samriddhi":[21,"Years","Y"],"PPF":[15,"Years","Y"],"EPF":[0,"Years","Y"]};
+const LB={name:{_:"Name",listed:"Company or ETF name (type to search)",mf:"Scheme name (type to search)",fixed:"Issuer or bank",sgb:"Series, e.g. SGB 2018-19 III",acct:"Bank or post office",epf:"Employer or UAN",policy:"Policy name"},
+ amount:{_:"Amount invested (₹)",fixed:"Principal (₹)",acct:"Total contributions to date (₹)",epf:"Total contributions to date (₹)"},inst:{_:"Monthly instalment (₹)"},
+ start:{_:"Start date",listed:"Purchase date",fixed:"Deposit or issue date",sgb:"Issue date",acct:"Account opening date",mf:"First investment date"},maturity:{_:"Maturity date",policy:"Policy maturity date",acct:"Maturity date (calculated)",fixed:"Maturity date (calculated)",sgb:"Maturity date (calculated)"},
+ rate:{_:"Interest rate % p.a.",sgb:"Coupon % p.a.",epf:"Interest rate % p.a. (optional)"},comp:{_:"Interest type"},tenor:{_:"Tenor"},
+ value:{_:"Current value (₹)",fixed:"Current value (₹), blank to calculate",acct:"Current balance (₹)",epf:"Current balance (₹)"},qty:{_:"Quantity",listed:"Quantity (shares or units)",mf:"Units held",sgb:"Quantity (grams)"},
+ avg:{_:"Average buy price (₹ per share)",sgb:"Issue price (₹ per gram)"},price:{_:"Previous close (₹ per share)",sgb:"Gold price today (₹ per gram)"},symbol:{_:"NSE symbol"},isin:{_:"ISIN"},amfi:{_:"AMFI scheme code"},acct:{_:"Held in"},note:{_:"Note or folio number"}};
+const todayIST=()=>new Date(Date.now()+19800000).toISOString().slice(0,10);
+const addT=(st,n,u)=>{const d=new Date(st+"T00:00");if(u=="Days")d.setDate(d.getDate()+Math.round(n));else{const m=Math.round(u=="Years"?n*12:n),day=d.getDate();d.setDate(1);d.setMonth(d.getMonth()+m);d.setDate(Math.min(day,new Date(d.getFullYear(),d.getMonth()+1,0).getDate()))}return iso(d)};
+const autoMat=(t,st)=>{const d=new Date(st+"T00:00");return t=="PPF"?((d.getMonth()>=3?d.getFullYear():d.getFullYear()-1)+16)+"-03-31":addT(st,21,"Years")};
+const SC={list:null};
+function setScrips(t){const L=t.split("\n").slice(1).map(l=>l.split(",")).map(c=>[(c[0]||"").trim(),(c[1]||"").trim(),(c.find(x=>/^IN[A-Z0-9]{10}$/.test(x.trim()))||"").trim()]).filter(x=>x[0]&&x[2]);SC.list=L;try{localStorage.setItem("nivesh.scrips",L.map(x=>x.join("|")).join("\n"))}catch(e){}return L}
+async function findScrips(q){q=q.toLowerCase();if(window.HAS_API){try{const r=await fetch("/api/scrips?q="+encodeURIComponent(q)),j=await r.json();if(r.ok&&Array.isArray(j)&&j.length)return j}catch(e){}}
+ if(!SC.list){try{const r=localStorage.getItem("nivesh.scrips");if(r)SC.list=r.split("\n").map(l=>l.split("|"))}catch(e){}}
+ if(!SC.list){try{setScrips(await (await fetch("https://nsearchives.nseindia.com/content/equities/EQUITY_L.csv")).text())}catch(e){}}
+ const mine=Object.values(S.inv).flat().filter(i=>i.symbol&&i.isin).map(i=>[i.symbol,i.name,i.isin]);
+ return [...(SC.list||[]),...mine].filter(x=>(x[0]||"").toLowerCase().startsWith(q)||(x[1]||"").toLowerCase().includes(q)).filter((x,n,a)=>a.findIndex(y=>y[0]==x[0])==n).slice(0,12).map(x=>({symbol:x[0],name:x[1],isin:x[2]}))}
+function pcFrom(j){const r=j.chart.result[0],ts=r.timestamp||[],cl=r.indicators.quote[0].close||[],T=todayIST();for(let k=ts.length-1;k>=0;k--){const d=new Date((ts[k]+19800)*1000).toISOString().slice(0,10);if(d<T&&cl[k]!=null)return{symbol:r.meta.symbol,price:Math.round(cl[k]*100)/100,asOf:d}}throw new Error("no previous close")}
+async function prevClose(sym){try{return await prevCloseLive(sym)}catch(e){const m=pxMap()[String(sym).toUpperCase()];if(m)return{symbol:sym,price:m[0],asOf:m[1]};throw e}}
+async function prevCloseLive(sym){if(window.HAS_API){const r=await fetch("/api/quote?symbol="+encodeURIComponent(sym)),j=await r.json();if(!r.ok)throw new Error(j.error);return j}
+ const r=await fetch("https://query1.finance.yahoo.com/v8/finance/chart/"+encodeURIComponent(sym)+".NS?interval=1d&range=10d");if(!r.ok)throw new Error("HTTP "+r.status);return pcFrom(await r.json())}
+const findMF=async q=>(await (await fetch("https://api.mfapi.in/mf/search?q="+encodeURIComponent(q))).json()).slice(0,12);
+async function mfNav(c){const j=await (await fetch("https://api.mfapi.in/mf/"+c+"/latest")).json(),d=j.data&&j.data[0];return{nav:+d.nav,date:d.date,isin:(j.meta&&(j.meta.isin_growth||j.meta.isin_div_reinvestment))||""}}
+function pickList(cb){const f=document.createElement("input");f.type="file";f.accept=".csv,text/csv";f.onchange=async()=>{const L=setScrips(await f.files[0].text());if(!L.length)alert("That file doesn’t look like the NSE equity list. It should be EQUITY_L.csv, with SYMBOL and ISIN NUMBER columns.");else cb&&cb()};f.click()}
+const MON={JAN:1,FEB:2,MAR:3,APR:4,MAY:5,JUN:6,JUL:7,AUG:8,SEP:9,OCT:10,NOV:11,DEC:12};let PXM=null;
+const pxMap=()=>{if(!PXM){try{PXM=JSON.parse(localStorage.getItem("nivesh.px")||"{}")}catch(e){PXM={}}}return PXM};
+function loadPx(text,fname){const rows=parseCsv(text.replace(/^\uFEFF/,"")),h=(rows.shift()||[]).map(x=>x.trim().toUpperCase()),iS=h.indexOf("SYMBOL"),iC=h.indexOf("CLOSE_PRICE")>=0?h.indexOf("CLOSE_PRICE"):h.indexOf("CLOSE"),iD=h.indexOf("DATE1")>=0?h.indexOf("DATE1"):h.indexOf("TIMESTAMP"),iR=h.indexOf("SERIES");
+ if(iS<0||iC<0)throw new Error("this doesn’t look like an NSE bhavcopy. It needs SYMBOL and CLOSE_PRICE columns.");const fm=/(\d{2})(\d{2})(\d{4})/.exec(fname||""),map={};
+ for(const r of rows){const sym=(r[iS]||"").trim(),c=parseFloat(r[iC]);if(!sym||!(c>0))continue;const ser=iR>=0?(r[iR]||"").trim():"EQ";if(map[sym]&&map[sym][2]=="EQ"&&ser!="EQ")continue;
+  let d="";const m=iD>=0&&/(\d{1,2})[- ]([A-Za-z]{3})[a-z]*[- ](\d{4})/.exec(r[iD]||"");if(m&&MON[m[2].toUpperCase()])d=m[3]+"-"+String(MON[m[2].toUpperCase()]).padStart(2,"0")+"-"+m[1].padStart(2,"0");if(!d&&fm)d=fm[3]+"-"+fm[2]+"-"+fm[1];map[sym]=[c,d,ser]}
+ return map}
+function pxLoad(cb){const f=document.createElement("input");f.type="file";f.accept=".csv,text/csv";f.onchange=async()=>{try{const map=loadPx(await f.files[0].text(),f.files[0].name),k=Object.keys(map);if(!k.length)throw new Error("no prices found in it.");
+ try{localStorage.setItem("nivesh.px",JSON.stringify(Object.fromEntries(k.map(x=>[x,[map[x][0],map[x][1]]]))))}catch(e){}PXM=null;cb(map,k);window.onPxLoaded&&window.onPxLoaded()}catch(e){alert("Couldn’t read this file: "+e.message)}};f.click()}
+const hold=()=>S.profiles.flatMap(p=>(S.inv[p.id]||[]).filter(i=>i.symbol&&+i.qty>0));
+function pxPick(){pxLoad((map,k)=>{const it=hold();let ok=0;const miss=[];for(const i of it){const m=map[String(i.symbol).toUpperCase()];if(m){i.value=Math.round(i.qty*m[0]*100)/100;i.pxDate=m[1];ok++}else miss.push(i.symbol)}
+ render();alert(k.length+" prices read"+(map[k[0]][1]?" (dated "+fd(map[k[0]][1])+")":"")+". "+ok+" of your "+it.length+" holdings updated."+(miss.length?"\nNot found: "+miss.join(", ")+".":""))})}
+async function updPx(b){const t0=b.textContent;b.disabled=true;b.textContent="Updating…";
+ try{if(window.HAS_API){await fetch("/api/refresh",{method:"POST"});await loadState();render();return}
+  const it=hold();let ok=0;const bad=[];for(const i of it){try{const p=await prevClose(String(i.symbol).toUpperCase());i.value=Math.round(i.qty*p.price*100)/100;i.pxDate=p.asOf;ok++}catch(e){bad.push(i.symbol)}}
+  render();if(!it.length)alert("Add shares with an NSE symbol and quantity first.");else if(bad.length)alert(ok+" of "+it.length+" prices updated.\n\nCouldn’t fetch: "+bad.join(", ")+".\n\nThis browser is probably blocking live price lookups. Use Load NSE price file instead.");else alert(ok+" prices updated to the previous close.")}
+ finally{b.disabled=false;b.textContent=t0}}
+function fld(k,t,o){const kd=KIND[t],L=LB[k][kd]||LB[k]._,v=o[k]??"",w=(k=="name"||k=="note"||k=="acct")?' class="w"':"";
+ if(k=="inst"&&t!="Recurring deposit")return "";
+ if(k=="acct")return `<label class="w">${L}<select name="acct"><option value="">Not specified</option>${[...(cp().banks||[]).map(b=>[b.id,"Bank: "+b.bank+" ••••"+b.acc]),...(cp().demats||[]).map(d=>[d.id,"Trading: "+d.broker+" "+d.client])].map(([x,l])=>`<option value="${x}" ${v==x?"selected":""}>${esc(l)}</option>`).join("")}</select></label>`;
+ if(k=="tenor")return `<label>${L}<span style="display:flex;gap:6px"><input name="tenor" type="number" min="0" step="any" style="width:90px" value="${esc(o.tenor)}"><select name="unit">${["Years","Months","Days"].map(u=>`<option ${(o.unit||"Years")==u?"selected":""}>${u}</option>`).join("")}</select></span></label>`;
+ if(k=="comp")return `<label>${L}<select name="comp">${[["Q","Compounded quarterly"],["M","Compounded monthly"],["H","Compounded half-yearly"],["Y","Compounded yearly"],["S","Simple interest"]].map(([x,l])=>`<option value="${x}" ${(o.comp||"Q")==x?"selected":""}>${l}</option>`).join("")}</select></label>`;
+ const ro=(k=="amount"&&t=="Recurring deposit")||(k=="maturity"&&false);
+ const req=(k=="name"||k=="start"||k=="avg"||(k=="amount")||(k=="maturity"&&(kd=="fixed"||kd=="sgb"))||(k=="rate"&&kd=="fixed")||(k=="qty"&&(kd=="listed"||kd=="mf"||kd=="sgb")))?" required":"";
+ const ty=(k=="start"||k=="maturity")?"date":["qty","amount","rate","value","avg","price","inst"].includes(k)?"number":"text";
+ return `<label${w}>${k=="amount"&&t=="Recurring deposit"?"Total deposits over the tenor (₹)":L}<input name="${k}" type="${ty}"${ty=="number"?' min="0" step="any"':""}${req}${ro?" readonly":""} value="${esc(v)}"></label>`}
+function form(i){const F=$("#frm");let o=i?{...i}:{type:"Equity shares",start:iso(d0())};const grab=()=>Object.fromEntries(new FormData(F)),Q=n=>F.elements.namedItem(n),dflt=t=>{const d=DEFT[t]||[];return{tenor:d[0]||"",unit:d[1]||"Years",comp:d[2]||"Y",maturity:""}};
+ if((KIND[o.type]=="listed"||KIND[o.type]=="sgb")&&+o.qty){o.avg=+o.amount/+o.qty;o.price=(o.value===""||o.value==null)?"":+o.value/+o.qty}
+ if(!i)Object.assign(o,dflt(o.type));
+ const hint={listed:window.HAS_API?"Type a few letters of the company name. Symbol, ISIN and the previous day’s closing price fill in.":"Type a few letters of the company name. If the list or price can’t load here, enter them by hand.",fixed:"Enter the tenor and the maturity date is worked out. Leave current value blank to accrue interest to today.",mf:"Type a few letters of the scheme name. The AMFI code and latest NAV fill in; value follows from the units.",sgb:"Maturity is 8 years from issue. Amount is quantity times issue price.",acct:"Maturity is worked out from the opening date."};
+ const calc=src=>{const g=n=>F.elements.namedItem(n),v=n=>g(n)?g(n).value:"",set=(n,x)=>{if(g(n))g(n).value=x},t=v("type"),kd=KIND[t],st=v("start");let h="";
+  if(g("tenor")){const ten=+v("tenor"),u=v("unit");
+   if(src=="maturity"&&v("maturity")&&st){const a=new Date(st+"T00:00"),b=new Date(v("maturity")+"T00:00"),m=(b.getFullYear()-a.getFullYear())*12+b.getMonth()-a.getMonth();if(m>0&&addT(st,m,"Months")==v("maturity")){set("tenor",m%12==0?m/12:m);set("unit",m%12==0?"Years":"Months")}else{set("tenor",Math.round((b-a)/DAY));set("unit","Days")}}
+   else if(st&&ten>0&&(src!="init"||!v("maturity")))set("maturity",addT(st,ten,u))}
+  else if(st&&(t=="PPF"||t=="Sukanya Samriddhi")&&(src=="start"||(src=="init"&&!v("maturity"))))set("maturity",autoMat(t,st));
+  const q=+v("qty")||0;
+  if(kd=="listed"||kd=="sgb"){const a=q*(+v("avg")||0),p=+v("price");if(a){h=`Amount invested <b>${inr(a)}</b>`;if(p){const pl=p*q-a;h+=` · Value <b>${inr(p*q)}</b> · <span class="${pl>=0?"up":"dn"}">${pl>=0?"Gain":"Loss"} ${inr(Math.abs(pl))}</span>`}}}
+  if(kd=="mf"&&o.nav&&(src=="qty"||src=="init"&&!v("value")))set("value",Math.round(o.nav*q*100)/100);
+  if(t=="Recurring deposit"){const ten=+v("tenor"),mo=Math.round(v("unit")=="Years"?ten*12:v("unit")=="Months"?ten:ten/30.4375);set("amount",Math.round((+v("inst")||0)*mo*100)/100)}
+  if((kd=="fixed"||kd=="sgb")&&v("maturity")&&st){const amt=kd=="sgb"?q*(+v("avg")||0):+v("amount"),rate=+v("rate");
+   if(amt>0&&rate>0){const tmp={type:t,amount:amt,start:st,maturity:v("maturity"),rate,comp:kd=="sgb"?"S":v("comp"),inst:+v("inst")},mv=valAt(tmp,Date.parse(v("maturity")+"T00:00"));h+=(h?" · ":"")+`Matures <b>${fd(v("maturity"))}</b> · Maturity value <b>${inr(mv)}</b> · Interest <b>${inr(mv-amt)}</b>`}else h+=(h?" · ":"")+`Matures <b>${fd(v("maturity"))}</b>`}
+  else if(kd=="acct"&&v("maturity"))h=`Matures <b>${fd(v("maturity"))}</b>`;
+  const c=$("#calc");if(c)c.innerHTML=h};
+ const draw=()=>{const kd=KIND[o.type];F.innerHTML=`<h2 class="w">${i?"Edit":"Add"} investment</h2><label class="w">Type<select name="type">${Object.keys(TYPES).map(t=>`<option ${o.type==t?"selected":""}>${t}</option>`).join("")}</select></label>
+ ${SPEC[kd].map(k=>fld(k,o.type,o)+(k=="name"?'<div class="w" id="lkr"></div>'+(kd=="listed"?'<div class="w mut" id="lst"></div>':""):"")).join("")}<div class="w card" id="calc" style="padding:8px 12px"></div>${hint[kd]?`<p class="w mut">${hint[kd]}</p>`:""}
+ <div class="w row" style="justify-content:flex-end"><button class="btn ghost" value="x" formnovalidate>Cancel</button><button class="btn" value="ok">Save</button></div>`;
+ Q("type").onchange=e=>{Object.assign(o,grab(),dflt(e.target.value),{type:e.target.value,price:"",value:"",nav:null});draw()};
+ F.oninput=e=>calc(e.target.name);
+ if(kd=="listed"||kd=="mf"){const nm=Q("name"),R=$("#lkr");let lt;
+  const st=()=>{const l=$("#lst");if(!l||window.HAS_API)return;let n=(SC.list||[]).length;if(!SC.list){try{const r=localStorage.getItem("nivesh.scrips");if(r)n=r.split("\n").length}catch(e){}}
+   l.innerHTML=n?`Company list loaded (${n} companies). <a class="e" id="ld2">Update list</a>`:`No company list loaded yet. <a class="e" id="ld2">Load the NSE company list file (EQUITY_L.csv)</a>`;$("#ld2").onclick=()=>pickList(()=>{st();nm.oninput()})};
+  const bind=()=>{const ld=$("#ld");if(ld)ld.onclick=()=>pickList(()=>{st();nm.oninput()})};st();
+  const pick=async x=>{R.textContent="Fetching…";
+   if(kd=="listed"){nm.value=x.name;Q("symbol").value=x.symbol;Q("isin").value=x.isin;try{const p=await prevClose(x.symbol);Q("price").value=p.price;o.pxDate=p.asOf;R.innerHTML=`Previous close <b>₹${p.price}</b> on ${fd(p.asOf)}`}catch(e){R.innerHTML='Couldn’t fetch the price online. <a class="e" id="pxl">Load the NSE price file</a> (daily bhavcopy) or enter it by hand.';$("#pxl").onclick=()=>pxLoad(()=>pick(x))}}
+   else{nm.value=x.schemeName;Q("amfi").value=x.schemeCode;try{const m=await mfNav(x.schemeCode);o.nav=m.nav;if(m.isin)Q("isin").value=m.isin;if(+Q("qty").value)Q("value").value=Math.round(m.nav*Q("qty").value*100)/100;R.innerHTML=`Latest NAV <b>₹${m.nav}</b> on ${esc(m.date)}`}catch(e){R.textContent="Couldn’t fetch the NAV. Enter the value by hand."}}calc("price")};
+  const ldl='<a class="e" id="ld">Load the NSE company list file (EQUITY_L.csv)</a>';
+  nm.oninput=()=>{clearTimeout(lt);lt=setTimeout(async()=>{const q=nm.value.trim();if(q.length<2){R.innerHTML="";return}R.textContent="Searching…";
+   try{const items=kd=="listed"?await findScrips(q):await findMF(q);st();R.innerHTML=items.map((x,n)=>`<a class="e" data-n="${n}" style="display:block;padding:3px 0">${kd=="listed"?esc(x.symbol)+" · "+esc(x.name)+" · "+esc(x.isin):esc(x.schemeName)}</a>`).join("")||(kd=="listed"?'<span class="mut">No match in the company list. '+ldl+' if it isn’t loaded or is out of date, or enter the details by hand.</span>':'<span class="mut">No match. Enter the details by hand.</span>');
+   R.querySelectorAll("[data-n]").forEach(a=>a.onclick=()=>pick(items[+a.dataset.n]));bind()}
+   catch(e){R.innerHTML='<span class="mut">Search isn’t available right now. '+(kd=="listed"?ldl+' or e':"E")+'nter the details by hand.</span>';bind()}},250)}}
+ calc(Q("tenor")&&!Q("tenor").value&&Q("maturity")&&Q("maturity").value?"maturity":"init")};
+ F.onsubmit=e=>{if(e.submitter.value!="ok")return;const d=grab(),kd=KIND[d.type],n=k=>d[k]===""||d[k]==null?"":+d[k];
+  const it={symbol:"",isin:"",qty:"",amfi:"",maturity:"",rate:0,value:"",note:"",acct:"",tenor:"",unit:"",inst:"",...d};it.qty=n("qty");it.rate=+d.rate||0;it.value=n("value");it.symbol=String(it.symbol).toUpperCase();it.comp=d.comp||(DEFT[d.type]||[0,0,"Y"])[2];if(o.pxDate&&kd=="listed")it.pxDate=o.pxDate;
+  if(kd=="listed"||kd=="sgb"){if(!(it.qty>0)||!(+d.avg>0)){e.preventDefault();alert("Enter the quantity and the buy price.");return}it.amount=it.qty*+d.avg;it.value=(d.price===""||d.price==null)?"":it.qty*+d.price;delete it.avg;delete it.price}else it.amount=+d.amount;
+  i?Object.assign(i,it):list().push({id:uid(),...it});render()};
+ draw();$("#dlg").showModal()}
+function csv(){const r=[["Name","Type","Class","Invested","Current","Start","Maturity","Rate","Note"],...list().map(i=>[i.name,i.type,TYPES[i.type],i.amount,Math.round(curVal(i)),i.start,i.maturity,i.rate,i.note])];
+ const b=new Blob([r.map(x=>x.map(c=>`"${String(c??"").replace(/"/g,'""')}"`).join(",")).join("\n")],{type:"text/csv"});const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="investments.csv";a.click()}
+document.addEventListener("click",e=>{const t=e.target.closest("[data-t],[data-cls],[data-type],[data-sort],[data-tx],[data-ed],[data-del],[data-use],[data-dp],#add,#exp,#np,#notif,#theme,#toolbtn,[data-tool],[data-open],[data-cr],[data-im],[data-rmtx],#dEd,#dTx,#dDel,#dInc,#cas,#rf,#ia,#iex,#imp,#eall,#px,#pxf,[data-es],[data-pd],[data-ie],[data-ix]");if(!t)return;const D=t.dataset;
+ if(t.id=="toolbtn"){toolMenu($("#tm").hidden);return}else if(D.tool){const f=$("#tm")._it[+D.tool].f;toolMenu(false);f();return}else if(D.t){S.tab=D.t;S.det=null;if(D.t=="Register"){S.imode="all";S.f.cls="";S.f.type=""}}
+ else if(D.open){const[pid,id]=D.open.split(":"),it=invById(pid,id);S.cur=pid;S.det=id;if(S.tab=="Dashboard"||S.tab=="Reminders"){S.imode="all";S.f.cls="";S.f.type=it?it.type:""}S.tab="Register"}
+ else if(D.cr){const c=D.cr;if(c=="ov"){S.tab="Dashboard";S.det=null;S.imode="all";S.f.cls="";S.f.type=""}else if(c=="inv"){S.tab="Register";S.det=null;S.imode="all";S.f.cls="";S.f.type=""}else if(c=="cls"){const k=S.imode!="all"?S.imode:(S.f.cls||TYPES[S.f.type]||"").toLowerCase();S.f.type="";S.det=null;if(k=="debt"){S.imode="debt";S.f.cls="Debt"}else{S.imode="equity";S.f.cls=""}}else if(c=="type"){S.det=null}}
+ else if(D.im){S.imode=D.im;S.f.cls=D.im=="debt"?"Debt":"";S.f.type="";S.det=null}
+ else if(D.rmtx){const i=invById(S.cur,S.det);i.tx=(i.tx||[]).filter(x=>x.id!=D.rmtx);txSync(i)}
+ else if(t.id=="dEd")return form(invById(S.cur,S.det));else if(t.id=="dTx")return txForm(invById(S.cur,S.det));
+ else if(t.id=="dDel"){if(confirm("Delete this investment and its transactions?")){S.inv[S.cur]=list().filter(x=>x.id!=S.det);S.det=null}}
+ else if(t.id=="dInc"){const i=invById(S.cur,S.det);return incForm(null,{source:i.name,kind:/listed|mf/.test(KIND[i.type])?"Dividend":"Interest"})}
+ else if(D.es){S.esort=[D.es,S.esort[0]==D.es?-S.esort[1]:-1]}else if(D.pd)return profForm(S.profiles.find(p=>p.id==D.pd));else if(D.ie)return incForm(incList().find(x=>x.id==D.ie));else if(D.ix){if(confirm("Delete this entry?"))S.inc[S.cur]=incList().filter(x=>x.id!=D.ix)}else if(t.id=="ia")return incForm();else if(t.id=="iex")return incCsv();else if(t.id=="imp")return impForm();else if(t.id=="eall"){S.eall=!S.eall}else if(D.cls){S.tab="Register";S.det=null;S.f.type="";if(D.cls=="Equity"){S.imode="equity";S.f.cls=""}else{S.imode="debt";S.f.cls="Debt"}}else if(D.type){S.f.type=D.type;S.f.cls="";S.imode="all";S.det=null;S.tab="Register"}
+ else if(D.sort){S.sort=[D.sort,S.sort[0]==D.sort?-S.sort[1]:1]}else if(D.tx){return txForm(list().find(i=>i.id==D.tx))}else if(D.ed){return form(list().find(i=>i.id==D.ed))}
+ else if(D.del){if(confirm("Delete this investment?"))S.inv[S.cur]=list().filter(i=>i.id!=D.del)}else if(D.use){S.cur=D.use}
+ else if(D.dp){if(confirm("Remove this investor and all their investments?")){S.profiles=S.profiles.filter(p=>p.id!=D.dp);delete S.inv[D.dp];delete S.inc[D.dp];if(S.cur==D.dp)S.cur=S.profiles[0].id}}
+ else if(t.id=="add")return form();else if(t.id=="exp")return csv();else if(t.id=="cas")return casPick();else if(t.id=="px"){updPx(t);return}else if(t.id=="pxf")return pxPick();else if(t.id=="rf"){t.textContent="Refreshing…";fetch("/api/refresh",{method:"POST"}).then(()=>loadState()).then(render);return}
+ else if(t.id=="np"){const n=prompt("Investor name");if(!n)return;const p={id:uid(),name:n,pan:(prompt("PAN (optional)")||"").toUpperCase()};S.profiles.push(p);S.cur=p.id}
+ else if(t.id=="notif"){if(typeof Notification!="undefined")Notification.requestPermission().then(render);return}
+ else if(t.id=="theme"){const r=document.documentElement,dk=r.dataset.theme?r.dataset.theme=="dark":matchMedia("(prefers-color-scheme:dark)").matches;r.dataset.theme=dk?"light":"dark";return}
+ render()});
+document.addEventListener("input",e=>{const t=e.target;if(t.id=="q"){S.f.q=t.value;const p=t.selectionStart;render();const q=$("#q");q.focus();q.setSelectionRange(p,p)}
+ else if(t.id=="fy"){S.fy=+t.value;render()}else if(t.id=="fc"){S.f.cls=t.value;render()}else if(t.id=="ft"){S.f.type=t.value;render()}else if(t.id=="win"){S.win=Math.min(90,Math.max(1,+t.value||15));save()}});
+document.addEventListener("change",e=>{if(e.target.id=="win")render();if(e.target.id=="who"){S.cur=e.target.value;render()}});
+window.notifyDue=()=>{try{if(typeof Notification!="undefined"&&Notification.permission=="granted"){const n=list().filter(i=>{const d=daysLeft(i);return d!=null&&d>=0&&d<=S.win});if(n.length)new Notification("Nivesh: "+n.length+" maturing soon",{body:n.map(i=>i.name+" – "+fd(i.maturity)).join("\n")})}}catch(e){}};
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="./firebase-config.js"></script>
+<script>
+(()=>{
+const KEY="nivesh.standalone.v1";
+window.HAS_API=false;
+window.loadAcc=()=>{};
+const escHtml=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let db=null, auth=null, user=null, lastJ="", lastAt=0, timer=null, pend=false, saving=false, loadDone=false;
+const core=()=>({profiles:S.profiles,inv:S.inv,inc:S.inc,win:S.win});
+const jsonOf=()=>JSON.stringify(core());
+const snap=()=>({app:"nivesh",v:1,at:lastAt||Date.now(),...core()});
+const valid=d=>d&&Array.isArray(d.profiles);
+const parse=j=>{try{const d=typeof j==="string"?JSON.parse(j):j;return valid(d)?d:null}catch(e){return null}};
+const T=x=>new Date(x).toLocaleString("en-IN",{day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"});
+const dataRef=()=>db.collection("shared").doc("nivesh");
+const historyRef=()=>dataRef().collection("history");
+const gate=document.createElement("div");
+gate.id="nivesh-auth-gate";
+gate.style.cssText="position:fixed;inset:0;z-index:99999;background:var(--bg,#eef2f1);display:flex;align-items:center;justify-content:center;padding:20px;";
+gate.innerHTML=`<section style="width:min(480px,100%);background:var(--sf,#fff);color:var(--ink,#12302b);border:1px solid var(--ln,#d5dfdc);border-radius:18px;padding:26px;box-shadow:0 12px 40px #0002;font-family:Manrope,system-ui,sans-serif">
+<div style="font-size:25px;font-weight:800;margin-bottom:4px">Nivesh</div>
+<p style="margin:0 0 18px;color:var(--mut,#5d7570)">Secure shared investment register</p>
+<div id="nivesh-auth-msg" style="margin:0 0 16px;font-size:14px">Connect securely with an approved Google account to access the shared portfolio.</div>
+<button id="nivesh-google-login" class="btn" style="width:100%">Continue with Google</button>
+<button id="nivesh-google-logout" class="btn ghost" style="width:100%;margin-top:8px;display:none">Sign out</button>
+<p style="font-size:12px;color:var(--mut,#5d7570);margin:16px 0 0">Only Gmail addresses explicitly allowed by the Firebase security rules can read or change this portfolio.</p>
+</section>`;
+document.body.appendChild(gate);
+const msg=(s)=>{const n=document.getElementById("nivesh-auth-msg");if(n)n.textContent=s};
+const setGate=(show)=>{gate.style.display=show?"flex":"none"};
+const setAppVisible=show=>{
+  const header=document.querySelector("header"),main=document.querySelector("main"),dlg=document.querySelector("#dlg");
+  if(header)header.style.visibility=show?"visible":"hidden";
+  if(main)main.style.visibility=show?"visible":"hidden";
+  if(dlg)dlg.style.visibility=show?"visible":"hidden";
+};
+setAppVisible(false);
+document.getElementById("nivesh-google-login").onclick=async()=>{
+  try{
+    msg("Opening Google sign-in…");
+    const provider=new firebase.auth.GoogleAuthProvider();
+    provider.setCustomParameters({prompt:"select_account"});
+    await auth.signInWithPopup(provider);
+  }catch(e){msg("Sign-in failed: "+(e.message||e));}
+};
+document.getElementById("nivesh-google-logout").onclick=async()=>{try{await auth.signOut()}catch(e){msg("Sign-out failed: "+e.message)}};
+
+const statusBox=document.createElement("div");
+statusBox.id="cloud-status";
+statusBox.className="card";
+statusBox.style.cssText="margin-bottom:14px;font-size:13px";
+const showStatus=(s,kind="")=>{
+  statusBox.className=kind==="bad"?"alert":"card";
+  statusBox.innerHTML=escHtml(s);
+};
+const addCloudStatus=()=>{const m=document.querySelector("main");if(m&&!statusBox.isConnected)m.prepend(statusBox)};
+const apply=d=>{
+  S.profiles=d.profiles||[];
+  S.inv=d.inv||{};
+  S.inc=d.inc||{};
+  S.win=d.win||15;
+  if(!S.profiles.length){S.profiles=[{id:"p1",name:"Primary investor",pan:""}];S.inv={p1:[]}}
+  S.cur=S.profiles[0].id;
+  lastAt=d.at||Date.now();
+  lastJ=jsonOf();
+};
+const pushHistory=async(d)=>{
+  try{
+    await historyRef().add({...d,createdAt:firebase.firestore.FieldValue.serverTimestamp(),createdBy:user.email||""});
+  }catch(e){console.warn("Cloud history entry could not be written",e)}
+};
+const loadRemote=async()=>{
+  const snapShot=await dataRef().get();
+  if(!snapShot.exists){
+    const initial={app:"nivesh",v:1,at:Date.now(),profiles:[{id:"p1",name:"Primary investor",pan:""}],inv:{p1:[]},inc:{},win:15};
+    await dataRef().set({...initial,updatedAt:firebase.firestore.FieldValue.serverTimestamp(),updatedBy:user.email||""});
+    apply(initial);
+  }else{
+    const d=parse(snapShot.data());
+    if(!d)throw new Error("The shared Firestore document has an unexpected format.");
+    apply(d);
+  }
+  lastJ=jsonOf();loadDone=true;
+  render();notifyDue();addCloudStatus();
+  showStatus("Cloud connected · shared portfolio · signed in as "+(user.email||"Google user")+" · saved data is shared with all approved users.");
+  setAppVisible(true);setGate(false);
+  const r=$("#role");if(r){r.hidden=false;r.textContent="Shared cloud data"}
+};
+const flush=async()=>{
+  if(!user||!loadDone||saving)return;
+  const j=jsonOf();if(j===lastJ){pend=false;return}
+  saving=true;lastJ=j;lastAt=Date.now();const d=snap();pend=false;
+  try{
+    await dataRef().set({...d,updatedAt:firebase.firestore.FieldValue.serverTimestamp(),updatedBy:user.email||""});
+    showStatus("Saved securely to the shared cloud · "+T(lastAt)+" · all approved users see the same data.");
+  }catch(e){
+    pend=true;
+    showStatus("Cloud save failed. Your changes are not confirmed as saved. Check your connection and access rules, then retry. "+(e.message||e),"bad");
+    console.error(e);
+  }finally{saving=false}
+};
+window.onSave=()=>{
+  if(!loadDone||!user)return;
+  if(jsonOf()===lastJ)return;
+  pend=true;clearTimeout(timer);timer=setTimeout(flush,500);
+};
+addEventListener("beforeunload",e=>{if(pend){e.preventDefault();e.returnValue=""}});
+document.addEventListener("visibilitychange",()=>{if(document.hidden&&pend)flush()});
+
+const histDlg=async()=>{
+  const F=$("#frm");F.onsubmit=null;
+  F.innerHTML=`<h2 class="w">Cloud history</h2><p class="w mut">Recent shared snapshots saved by Nivesh. Restoring a snapshot replaces the shared portfolio for every approved user.</p><div class="w" id="nivesh-cloud-history">Loading…</div><div class="w row" style="justify-content:flex-end"><button class="btn ghost" value="x">Close</button></div>`;
+  $("#dlg").showModal();
+  try{
+    const q=await historyRef().orderBy("createdAt","desc").limit(12).get();
+    const box=$("#nivesh-cloud-history");
+    if(!q.size){box.innerHTML='<span class="mut">No history entries yet.</span>';return}
+    box.innerHTML=q.docs.map((doc,i)=>{
+      const d=doc.data(),dt=d.createdAt&&d.createdAt.toDate?d.createdAt.toDate():new Date(d.at||Date.now());
+      const count=Object.values(d.inv||{}).flat().length;
+      return `<div class="row" style="justify-content:space-between;margin:0 0 6px"><span>${escHtml(T(dt))} · ${d.profiles?.length||0} investors, ${count} investments</span><a class="e" data-cloud-h="${i}">Restore</a></div>`;
+    }).join("");
+    box.querySelectorAll("[data-cloud-h]").forEach((a,i)=>a.onclick=async()=>{
+      if(!confirm("Restore this snapshot to the shared portfolio for all approved users?"))return;
+      const d=q.docs[i].data();if(!valid(d))return alert("This history entry is invalid.");
+      await pushHistory(snap());
+      const restore={app:"nivesh",v:1,at:Date.now(),profiles:d.profiles,inv:d.inv||{},inc:d.inc||{},win:d.win||15};
+      await dataRef().set({...restore,updatedAt:firebase.firestore.FieldValue.serverTimestamp(),updatedBy:user.email||""});
+      apply(restore);lastJ=jsonOf();render();$("#dlg").close();
+      showStatus("Cloud history restored by "+(user.email||"an approved user")+".");
+    });
+  }catch(e){$("#nivesh-cloud-history").textContent="Could not load cloud history: "+e.message}
+};
+const mk=(l,f)=>addTool(l,f);
+mk("Back up",()=>{
+  const t=JSON.stringify(snap(),null,2),a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob([t],{type:"application/json"}));
+  a.download="nivesh-backup-"+iso(d0())+".json";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+});
+mk("Restore",()=>{
+  const f=document.createElement("input");f.type="file";f.accept=".json";
+  f.onchange=async()=>{
+    try{
+      const d=parse(await f.files[0].text());if(!d)return alert("This isn’t a Nivesh backup file.");
+      if(!confirm("Replace the shared cloud portfolio for all approved users with this backup? A cloud history copy will be kept."))return;
+      await pushHistory(snap());apply(d);lastJ="";await flush();render();
+    }catch(e){alert("Restore failed: "+e.message)}
+  };f.click();
+});
+mk("History",histDlg);
+const originalToolButton=$("#toolbtn");
+if(originalToolButton)originalToolButton.title="Back up / restore / shared cloud history";
+const r=$("#role");if(r){r.hidden=false;r.textContent="Sign-in required"}
+(async()=>{
+  try{
+    if(!window.NIVESH_FIREBASE_CONFIG||!window.NIVESH_FIREBASE_CONFIG.apiKey||window.NIVESH_FIREBASE_CONFIG.apiKey==="PASTE_API_KEY_HERE"){
+      msg("Firebase is not configured yet. Complete the setup steps in README.md, then replace firebase-config.js with your project's web app configuration.");
+      return;
+    }
+    firebase.initializeApp(window.NIVESH_FIREBASE_CONFIG);
+    auth=firebase.auth();db=firebase.firestore();
+    db.settings({ignoreUndefinedProperties:true});
+    auth.onAuthStateChanged(async u=>{
+      user=u;
+      document.getElementById("nivesh-google-logout").style.display=u?"block":"none";
+      if(!u){loadDone=false;setAppVisible(false);setGate(true);msg("Connect securely with an approved Google account to access the shared portfolio.");return}
+      setGate(true);setAppVisible(false);msg("Checking access and loading the shared portfolio…");
+      try{await loadRemote()}
+      catch(e){
+        console.error(e);await auth.signOut().catch(()=>{});
+        setGate(true);setAppVisible(false);
+        msg("Access denied or cloud setup incomplete. Only emails listed in firestore.rules are permitted. Details: "+(e.message||e));
+      }
+    });
+  }catch(e){msg("Firebase initialization error: "+e.message)}
+})();
+})();</script></body></html>

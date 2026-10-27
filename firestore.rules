@@ -1,0 +1,31 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // IMPORTANT: Replace these sample values with the exact Gmail addresses
+    // you approve. Do not leave the placeholder in a production deployment.
+    function isApproved() {
+      return request.auth != null
+        && request.auth.token.email_verified == true
+        && request.auth.token.email in [
+          "replace-with-approved@gmail.com"
+        ];
+    }
+
+    // All approved users share one portfolio. Access is enforced on the server,
+    // not merely hidden in the browser.
+    match /shared/nivesh {
+      allow read, create, update: if isApproved();
+      allow delete: if false;
+
+      match /history/{historyId} {
+        allow read, create: if isApproved();
+        allow update, delete: if false;
+      }
+    }
+
+    // Deny every other collection/document by default.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
