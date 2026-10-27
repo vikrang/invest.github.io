@@ -51,7 +51,7 @@ const TYPES={ "Equity shares":"Equity","Equity mutual fund":"Equity","ETF":"Equi
 "Fixed deposit":"Debt","Recurring deposit":"Debt","PPF":"Debt","EPF":"Debt","NSC":"Debt","Sukanya Samriddhi":"Debt","Debt mutual fund":"Debt","Bonds / NCD":"Debt","Sovereign Gold Bond":"Debt","Post Office scheme":"Debt","Senior Citizens Savings":"Debt"};
 const DAY=864e5,$=s=>document.querySelector(s);
 let S={profiles:[],cur:null,inv:{},inc:{},win:15,tab:"Dashboard",eall:false,esort:["pl",-1],fy:null,imode:"all",det:null,f:{q:"",cls:"",type:""},sort:["maturity",1]};
-let RW=false;const save=()=>{window.onSave&&onSave()};
+let RW=true;const save=()=>{window.onSave&&onSave()};
 const uid=()=>Math.random().toString(36).slice(2,9);
 const d0=()=>{const d=new Date();d.setHours(0,0,0,0);return d};
 const iso=d=>new Date(d.getTime()-d.getTimezoneOffset()*6e4).toISOString().slice(0,10);
