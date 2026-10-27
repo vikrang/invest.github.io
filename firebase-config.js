@@ -3,8 +3,9 @@
  * Copy the Firebase config from Firebase Console > Project settings > Your apps > Web app.
  * These identifiers are not passwords, but do not place service-account private keys here.
  */
-const firebaseConfig = {
-  apiKey: "PASTE_YOUR_API_KEY_HERE",
+
+window.NIVESH_FIREBASE_CONFIG = {
+  apiKey: "AIzaSyBVezYo-OXLf6y6-0Xtnh7b7Y0RcaGGSaM",
   authDomain: "nivesh-1d768.firebaseapp.com",
   projectId: "nivesh-1d768",
   storageBucket: "nivesh-1d768.firebasestorage.app",
@@ -13,4 +14,3 @@ const firebaseConfig = {
   measurementId: "G-H627S3SXS3"
 };
 
-window.firebaseConfig = firebaseConfig;
